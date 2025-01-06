@@ -1,0 +1,11 @@
+name: "PR Flow"
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  pr-test:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip-pr-test') }}
+    uses: ./.github/workflows/pr-test.yaml
+    secrets: inherit
