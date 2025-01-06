@@ -8,9 +8,23 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        sm: "375px",
+        md: "768px",
+        lg: "1080px",
+        xl: "1440px",
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        // Todo 필요한 color 들 추가
+        primary: {
+          DEFAULT: "#CA3D7D",
+          100: "#FFBED7",
+          200: "#FF7CAE",
+          300: "#FF3791",
+          400: "#CA3D7D",
+          500: "#932D5B",
+          600: "#5D203B",
+        },
       },
     },
   },
