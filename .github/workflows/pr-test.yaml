@@ -1,0 +1,11 @@
+name: "PR Test"
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yaml
+    with:
+      NODE_VERSION: 22.x
+    secrets: inherit
