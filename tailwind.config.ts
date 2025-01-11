@@ -1,3 +1,4 @@
+import { COLORS } from "./src/styles/colors"
 import type { Config } from "tailwindcss"
 
 export default {
@@ -17,17 +18,17 @@ export default {
       colors: {
         // Todo 필요한 color 들 추가
         primary: {
-          DEFAULT: "#CA3D7D",
-          100: "#FFBED7",
-          200: "#FF7CAE",
-          300: "#FF3791",
-          400: "#CA3D7D",
-          500: "#932D5B",
-          600: "#5D203B"
+          DEFAULT: COLORS.PRIMARY,
+          100: COLORS.PRIMARY_100,
+          200: COLORS.PRIMARY_200,
+          300: COLORS.PRIMARY_300,
+          400: COLORS.PRIMARY_400,
+          500: COLORS.PRIMARY_500,
+          600: COLORS.PRIMARY_600
         },
-        white: "#F7F7F7",
+        white: COLORS.WHITE,
         dark: {
-          DEFAULT: "#171617"
+          DEFAULT: COLORS.DARK
         }
       }
     }
