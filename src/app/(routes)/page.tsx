@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <section className="flex flex-col">
-      <button onClick={() => showToast({ text: "테스트", type: "success" })}>auto close Toast</button>
+      <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
       <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
     </section>
   )

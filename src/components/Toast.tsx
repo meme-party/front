@@ -3,7 +3,12 @@
 import { useToast } from "@/store/toast"
 import { cn } from "@/utils/cn"
 import { AnimatePresence, motion } from "framer-motion"
+import dynamic from "next/dynamic"
 import ReactDOM from "react-dom"
+
+const CircleCheck = dynamic(() => import("@/icons/CircleCheck"))
+const TriangleAlert = dynamic(() => import("@/icons/TriangleAlert"))
+const CircleAlert = dynamic(() => import("@/icons/CircleAlert"))
 
 export default function Toast() {
   const { toast, closeToast } = useToast()
@@ -12,11 +17,18 @@ export default function Toast() {
 
   if (!element) return null
 
+  // Todo type 에 따라 텍스트색상 다르게 할건지 논의 필요
+  // const toastTypeClasses = {
+  //   success: "text-primary-300",
+  //   warning: "text-yellow-500",
+  //   error: "text-red-500"
+  // }
+
   const content = (
     <AnimatePresence>
       {toast.isOpened && (
         <motion.section
-          className="fixed w-full bottom-0 bg-[#171617]/60 py-10 flex justify-center px-6"
+          className="fixed w-full bottom-0 bg-[#171617]/60 py-10 flex justify-center px-6 backdrop-blur-lg drop-shadow-lg"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -24,21 +36,20 @@ export default function Toast() {
             duration: 0.5,
             ease: "easeOut"
           }}
-          style={{
-            filter: "drop-shadow(-10px 0px 24px rgba(0, 0, 0, 0.25))",
-            backdropFilter: "blur(16px)"
-          }}
         >
-          <div className="flex items-center justify-between max-w-[1280px] w-full">
-            <p
+          <article className="flex items-center justify-between max-w-[1280px] w-full">
+            <div
               className={cn(
-                toast.type === "success" && "text-primary-300",
-                toast.type === "warning" && "text-yellow-500",
-                toast.type === "error" && "text-red-500"
+                "flex gap-[4px] text-primary-300"
+                // toastTypeClasses[toast.type]
               )}
             >
+              {toast.type === "success" && <CircleCheck pathColor="#17161799" />}
+              {toast.type === "warning" && <TriangleAlert pathColor="#17161799" />}
+              {toast.type === "error" && <CircleAlert pathColor="#17161799" />}
+
               {toast.text}
-            </p>
+            </div>
             {!toast.autoClose && (
               <button
                 className="px-3 py-2 min-w-[148px] bg-gray-800 text-white rounded-md hover:bg-gray-700"
@@ -47,7 +58,7 @@ export default function Toast() {
                 완료
               </button>
             )}
-          </div>
+          </article>
         </motion.section>
       )}
     </AnimatePresence>
