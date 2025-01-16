@@ -11,7 +11,7 @@ export default function CircleAlert({
   size = 24,
   bgColor = COLORS.PRIMARY,
   borderColor = COLORS.PRIMARY,
-  pathColor = COLORS.WHITE,
+  pathColor = COLORS.WHITE
 }: Params) {
   return (
     <svg
