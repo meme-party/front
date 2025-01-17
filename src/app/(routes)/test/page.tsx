@@ -28,15 +28,23 @@ export default function TestPage() {
         <TagButton title="ㄱ키워드" selected onClick={() => console.log("TagButton2 클릭")} />
       </article>
       <Button className="w-[120px] text-white">컬렉션 1</Button>
-      <Input placeholder="컬렉션 이름을 검색해주세요" />
-      <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
-      <SearchInput
-        placeholder="검색어를 입력해주세요"
-        onSearch={() => console.log("검색 이벤트!")}
-        Icon={Search}
-        iconProps={{ color: COLORS.PRIMARY }}
-      />
-      <Textarea />
+      <article className="flex gap-[12px]">
+        <Input placeholder="컬렉션 이름을 검색해주세요" />
+        <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
+      </article>
+      <article className="flex gap-[12px]">
+        <SearchInput
+          placeholder="검색어를 입력해주세요"
+          onSearch={() => console.log("검색 이벤트!")}
+          Icon={Search}
+          iconProps={{ color: COLORS.PRIMARY }}
+        />
+        <SearchInput placeholder="아이콘 없는 검색 Input" onSearch={() => console.log("검색 이벤트!")} />
+      </article>
+      <article className="flex gap-[12px]">
+        <Textarea />
+        <Textarea className="border-none" />
+      </article>
     </section>
   )
 }
