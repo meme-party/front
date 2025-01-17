@@ -28,7 +28,7 @@ export default function Toast() {
     <AnimatePresence>
       {toast.isOpened && (
         <motion.section
-          className="fixed bottom-0 top-0 flex w-full justify-center bg-[#171617]/60 px-6 py-10 drop-shadow-lg backdrop-blur-lg"
+          className="fixed bottom-0 top-0 flex w-full justify-center bg-dark/60 px-6 py-10 drop-shadow-lg backdrop-blur-lg"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}
@@ -52,7 +52,7 @@ export default function Toast() {
             </div>
             {!toast.autoClose && (
               <button
-                className="min-w-[148px] rounded-md bg-gray-800 px-3 py-2 text-white hover:bg-gray-700"
+                className="min-w-[148px] rounded-md bg-gray-scale-800 px-3 py-2 text-white hover:bg-gray-scale-700"
                 onClick={closeToast}
               >
                 완료
