@@ -3,11 +3,12 @@
 import Button from "@/components/Button"
 import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
+import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import Textarea from "@/components/Textarea"
 import { useToast } from "@/store/toast"
 import { COLORS } from "@/styles/colors"
-import { Type } from "lucide-react"
+import { Search, Type } from "lucide-react"
 
 export default function TestPage() {
   const { showToast } = useToast()
@@ -29,6 +30,12 @@ export default function TestPage() {
       <Button className="w-[120px] text-white">컬렉션 1</Button>
       <Input placeholder="컬렉션 이름을 검색해주세요" />
       <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
+      <SearchInput
+        placeholder="검색어를 입력해주세요"
+        onSearch={() => console.log("검색 이벤트!")}
+        Icon={Search}
+        iconProps={{ color: COLORS.PRIMARY }}
+      />
       <Textarea />
     </section>
   )
