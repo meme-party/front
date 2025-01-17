@@ -1,5 +1,6 @@
 import { cn } from "@/utils/cn"
 import type { ButtonHTMLAttributes } from "react"
+import Button from "./Button"
 
 interface Params extends ButtonHTMLAttributes<HTMLButtonElement> {
   title: string
@@ -8,7 +9,7 @@ interface Params extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function TagButton({ title, selected, ...buttonProps }: Params) {
   return (
-    <button
+    <Button
       className={cn(
         "bg-gray-scale-700 w-fit rounded-lg p-2 px-4 text-white",
         selected && "border border-primary-400 text-primary-300"
@@ -16,6 +17,6 @@ export default function TagButton({ title, selected, ...buttonProps }: Params) {
       {...buttonProps}
     >
       <p className="font-medium">{title}</p>
-    </button>
+    </Button>
   )
 }
