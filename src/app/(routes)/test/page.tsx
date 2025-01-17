@@ -1,8 +1,10 @@
 "use client"
 
 import Button from "@/components/Button"
+import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
 import TagButton from "@/components/TagButton"
+import Textarea from "@/components/Textarea"
 import { useToast } from "@/store/toast"
 import { COLORS } from "@/styles/colors"
 import { Type } from "lucide-react"
@@ -24,7 +26,10 @@ export default function TestPage() {
         <TagButton title="키워드" onClick={() => console.log("TagButton1 클릭")} />
         <TagButton title="ㄱ키워드" selected onClick={() => console.log("TagButton2 클릭")} />
       </article>
-      <Button className="text-white w-[120px]">컬렉션 1</Button>
+      <Button className="w-[120px] text-white">컬렉션 1</Button>
+      <Input placeholder="컬렉션 이름을 검색해주세요" />
+      <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
+      <Textarea />
     </section>
   )
 }
