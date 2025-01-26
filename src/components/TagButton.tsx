@@ -4,20 +4,20 @@ import Button from "./Button"
 
 interface Params extends ButtonHTMLAttributes<HTMLButtonElement> {
   title: string
-  selected?: boolean
+  variant?: "default" | "colored"
 }
 
-export default function TagButton({ title, selected, ...buttonProps }: Params) {
+export default function TagButton({ title, variant = "default", ...buttonProps }: Params) {
   return (
     <Button
       {...buttonProps}
       className={cn(
-        "bg-gray-scale-700 w-fit rounded-lg p-2 px-4 text-white",
-        selected && "border border-primary-400 text-primary-300",
+        "w-fit rounded-lg bg-gray-scale-700 p-2 px-4 text-white",
+        variant === "colored" && "border border-primary-400 font-semibold text-primary-300",
         buttonProps.className
       )}
     >
-      <p className="font-medium">{title}</p>
+      <p className={cn("font-medium", variant === "colored" && "font-semibold")}>{title}</p>
     </Button>
   )
 }

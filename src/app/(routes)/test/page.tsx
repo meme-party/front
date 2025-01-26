@@ -14,7 +14,7 @@ export default function TestPage() {
   const { showToast } = useToast()
 
   return (
-    <section className="flex flex-col gap-[12px]">
+    <section className="my-[40px] flex flex-col gap-[12px]">
       <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
       <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
       <MemeTypeButton
@@ -25,7 +25,7 @@ export default function TestPage() {
       />
       <article className="flex gap-[12px]">
         <TagButton title="키워드" onClick={() => console.log("TagButton1 클릭")} />
-        <TagButton title="ㄱ키워드" selected onClick={() => console.log("TagButton2 클릭")} />
+        <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
       </article>
       <Button className="w-[120px] text-white">컬렉션 1</Button>
       <article className="flex gap-[12px]">

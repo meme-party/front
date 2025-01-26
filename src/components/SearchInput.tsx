@@ -3,6 +3,7 @@
 import { cn } from "@/utils/cn"
 import type { LucideProps } from "lucide-react"
 import type { ComponentType, InputHTMLAttributes, SVGProps } from "react"
+import IconButton from "./IconButton"
 
 interface Params extends InputHTMLAttributes<HTMLInputElement> {
   onSearch?: () => void
@@ -23,16 +24,12 @@ export default function SearchInput({ onSearch, Icon, iconProps, ...props }: Par
         {...props}
         onKeyDown={handleKeyDown}
         className={cn(
-          "placeholder:text-gray bg-gray-scale-800 w-full rounded-lg border border-primary-400 p-4 font-semibold outline-none",
+          "w-full rounded-lg border border-primary-400 bg-gray-scale-800 p-4 font-semibold outline-none placeholder:text-gray",
           Icon && "pr-10",
           props.className
         )}
       />
-      {Icon && (
-        <button type="button" onClick={onSearch} className="absolute end-2 hover:text-primary-500">
-          <Icon {...iconProps} />
-        </button>
-      )}
+      {Icon && <IconButton onClick={onSearch} className="absolute end-2" Icon={Icon} iconProps={iconProps} />}
     </section>
   )
 }
