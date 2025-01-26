@@ -3,6 +3,7 @@
 import Button from "@/components/Button"
 import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
+import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import Textarea from "@/components/Textarea"
@@ -31,6 +32,9 @@ export default function TestPage() {
       <article className="flex gap-[12px]">
         <Input placeholder="컬렉션 이름을 검색해주세요" />
         <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
+      </article>
+      <article className="flex gap-[12px]">
+        <MoreViewButton title="인기 밈 TOP 100" onClick={() => console.log("인기 밈 TOP 100 클릭")} />
       </article>
       <article className="flex gap-[12px]">
         <SearchInput
