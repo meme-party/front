@@ -7,9 +7,10 @@ import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import Textarea from "@/components/Textarea"
+import ThumbnailCard from "@/components/ThumbnailCard"
 import { useToast } from "@/store/toast"
 import { COLORS } from "@/styles/colors"
-import { Search, Type } from "lucide-react"
+import { Heart, Search, Type } from "lucide-react"
 
 export default function TestPage() {
   const { showToast } = useToast()
@@ -49,6 +50,22 @@ export default function TestPage() {
         <Textarea />
         <Textarea className="border-none" />
       </article>
+      <article className="flex gap-[12px]">
+        <ThumbnailCard
+          type="text"
+          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
+          Icon={Heart}
+          iconProps={{ color: COLORS.PRIMARY }}
+        />
+        <ThumbnailCard
+          type="text"
+          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
+          Icon={Heart}
+          iconProps={{ color: COLORS.PRIMARY, fill: COLORS.PRIMARY }}
+        />
+      </article>
+      <ThumbnailCard type="image" url="/cat.png" />
+      <ThumbnailCard type="video" url="" />
     </section>
   )
 }
