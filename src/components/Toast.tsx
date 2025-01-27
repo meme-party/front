@@ -28,7 +28,7 @@ export default function Toast() {
     <AnimatePresence>
       {toast.isOpened && (
         <motion.section
-          className="fixed bottom-0 flex w-full justify-center bg-dark/60 px-6 py-10 drop-shadow-lg backdrop-blur-lg"
+          className="fixed bottom-0 flex w-full justify-center bg-dark/60 px-6 py-10 drop-shadow-toast backdrop-blur-lg"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 50, opacity: 0 }}

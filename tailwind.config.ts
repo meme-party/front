@@ -15,6 +15,10 @@ export default {
         lg: "1080px",
         xl: "1440px"
       },
+      dropShadow: {
+        toast: "0 -10px 24px rgba(0, 0, 0, 0.6)",
+        thumbnail: "0 2px 4px rgba(203, 199, 203, 0.2)"
+      },
       colors: {
         // Todo 필요한 color 들 추가
         primary: {
