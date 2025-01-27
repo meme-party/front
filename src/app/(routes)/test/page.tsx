@@ -16,7 +16,7 @@ export default function TestPage() {
   const { showToast } = useToast()
 
   return (
-    <section className="my-[40px] flex flex-col gap-[12px]">
+    <section className="mx-[20px] my-[80px] flex flex-col gap-[12px]">
       <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
       <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
       <MemeTypeButton
@@ -59,13 +59,17 @@ export default function TestPage() {
         />
         <ThumbnailCard
           type="text"
-          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
+          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
           Icon={Heart}
           iconProps={{ color: COLORS.PRIMARY, fill: COLORS.PRIMARY }}
+          like
         />
       </article>
-      <ThumbnailCard type="image" url="/cat.png" />
-      <ThumbnailCard type="video" url="" />
+      <article className="flex gap-[12px]">
+        <ThumbnailCard type="image" url="/cat.png" />
+        <ThumbnailCard type="image" url="/kakao.png" />
+      </article>
+      <ThumbnailCard type="video" url="비디오는 어떻게 보여주는게 좋을까요?" />
     </section>
   )
 }
