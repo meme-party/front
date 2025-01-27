@@ -11,7 +11,7 @@ export default function Input(props: InputHTMLAttributes<HTMLInputElement>) {
       <input
         {...props}
         className={cn(
-          "placeholder:text-gray bg-gray-scale-800 w-fit rounded-lg border border-primary-400 p-4 font-semibold outline-none",
+          "w-fit rounded-lg border border-primary-400 bg-gray-scale-800 p-4 font-semibold outline-none placeholder:text-gray",
           props.className
         )}
       />
