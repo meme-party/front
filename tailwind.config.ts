@@ -1,5 +1,5 @@
-import { COLORS } from "./src/styles/colors"
 import type { Config } from "tailwindcss"
+import { COLORS } from "./src/styles/colors"
 
 export default {
   content: [
@@ -15,6 +15,10 @@ export default {
         lg: "1080px",
         xl: "1440px"
       },
+      dropShadow: {
+        toast: "0 -10px 24px rgba(0, 0, 0, 0.6)",
+        thumbnail: "0 2px 4px rgba(203, 199, 203, 0.2)"
+      },
       colors: {
         // Todo 필요한 color 들 추가
         primary: {
@@ -27,8 +31,18 @@ export default {
           600: COLORS.PRIMARY_600
         },
         white: COLORS.WHITE,
-        dark: {
-          DEFAULT: COLORS.DARK
+        gray: COLORS.GRAY,
+        dark: COLORS.DARK,
+        "gray-scale": {
+          100: COLORS.GRAY_SCALE_100,
+          200: COLORS.GRAY_SCALE_200,
+          300: COLORS.GRAY_SCALE_300,
+          400: COLORS.GRAY_SCALE_400,
+          500: COLORS.GRAY_SCALE_500,
+          600: COLORS.GRAY_SCALE_600,
+          700: COLORS.GRAY_SCALE_700,
+          800: COLORS.GRAY_SCALE_800,
+          900: COLORS.GRAY_SCALE_900
         }
       }
     }
