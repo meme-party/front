@@ -1,6 +1,7 @@
 "use client"
 
 import Button from "@/components/Button"
+import Header from "@/components/Header"
 import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
 import MoreViewButton from "@/components/MoreViewButton"
@@ -17,6 +18,7 @@ export default function TestPage() {
 
   return (
     <section className="mx-[20px] my-[80px] flex flex-col gap-[12px]">
+      <Header />
       <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
       <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
       <MemeTypeButton
