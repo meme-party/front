@@ -38,6 +38,10 @@ export default {
           800: COLORS.GRAY_SCALE_800,
           900: COLORS.GRAY_SCALE_900
         },
+        "color-opacity": {
+          20: COLORS.COLOR_OPACITY_20,
+          60: COLORS.COLOR_OPACITY_60
+        },
         semantic: COLORS.SEMANTIC
       },
       fontWeight: {
