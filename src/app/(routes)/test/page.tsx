@@ -1,6 +1,7 @@
 "use client"
 
 import Button from "@/components/Button"
+import Footer from "@/components/Footer"
 import Header from "@/components/Header"
 import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
@@ -9,18 +10,16 @@ import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import Textarea from "@/components/Textarea"
 import ThumbnailCard from "@/components/ThumbnailCard"
-import { useToast } from "@/store/toast"
 import { COLORS } from "@/styles/colors"
 import { Heart, Search, Type } from "lucide-react"
+import { toast } from "sonner"
 
 export default function TestPage() {
-  const { showToast } = useToast()
-
   return (
     <section className="mx-[20px] my-[80px] flex flex-col gap-[12px]">
       <Header />
-      <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
-      <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
+      <Footer />
+      <button onClick={() => toast.success("삭제가 완료되었습니다!")}>토스트 메세지</button>
       <MemeTypeButton
         title="텍스트밈"
         Icon={Type}

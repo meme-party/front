@@ -1,4 +1,4 @@
-import Toast from "@/components/Toast"
+import NewToast from "@/components/NewToast"
 import "@/styles/globals.css"
 import "@/styles/reset.css"
 import type { Metadata } from "next"
@@ -28,8 +28,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} text-white antialiased`}>
         <div id="toastPortal" />
-        <Toast />
         {children}
+        <NewToast />
       </body>
     </html>
   )
