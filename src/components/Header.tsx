@@ -16,10 +16,10 @@ export default function Header() {
           <div className="relative h-[24px] w-[24px]">
             <Image src={"/cat.png"} alt="profile-image" fill className="rounded-full" />
           </div>
-          <p className="hidden md:flex">유저 닉네임이 들어가요</p>
+          <p className="hidden text-h3-r md:flex">유저 닉네임이 들어가요</p>
         </div>
         <Search size={24} color={COLORS.PRIMARY} />
-        <Button className="hidden bg-primary-300 px-[24px] py-[4px] md:flex">로그인</Button>
+        <Button className="hidden bg-primary-300 px-[24px] py-[4px] text-h2-sb md:flex">로그인</Button>
       </article>
     </section>
   )

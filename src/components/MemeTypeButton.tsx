@@ -13,10 +13,10 @@ export default function MemeTypeButton({ title, Icon, iconProps, ...buttonProps 
   return (
     <Button
       {...buttonProps}
-      className={cn("flex w-[224px] items-center gap-[12px] rounded-lg bg-primary-400 p-2", buttonProps.className)}
+      className={cn("flex w-[224px] items-center gap-[12px] rounded-[8px] bg-primary-400 p-2", buttonProps.className)}
     >
       {!!Icon && <Icon {...iconProps} />}
-      <p className="font-bold text-dark">{title}</p>
+      <p className="text-h2-b text-gray-scale-900">{title}</p>
     </Button>
   )
 }

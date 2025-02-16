@@ -40,14 +40,14 @@ export default function ThumbnailCard({
   return (
     <section
       className={cn(
-        "relative flex h-fit w-[224px] flex-col gap-[24px] break-all rounded-lg bg-gray-scale-700 p-4",
+        "relative flex h-fit w-[224px] flex-col gap-[24px] break-all rounded-[8px] bg-gray-scale-700 p-[16px]",
         like && "border border-primary drop-shadow-thumbnail"
       )}
     >
       {Icon && <IconButton Icon={Icon} iconProps={iconProps} className="self-end" />}
       {type === "text" && <p>{text}</p>}
       {type === "image" && (
-        <Image src={url} alt={"meme-thumbnail"} width={224} height={0} className="rounded-md object-contain" />
+        <Image src={url} alt={"meme-thumbnail"} width={224} height={0} className="rounded-[8px] object-contain" />
       )}
       {type === "video" && <p>{url}</p>}
     </section>
