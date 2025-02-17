@@ -1,4 +1,4 @@
-import NewToast from "@/components/NewToast"
+import Toast from "@/components/Toast"
 import { Pretendard } from "@/fonts"
 import "@/styles/globals.css"
 import "@/styles/reset.css"
@@ -18,9 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(Pretendard.variable)}>
-        <div id="toastPortal" />
         {children}
-        <NewToast />
+        <Toast />
       </body>
     </html>
   )
