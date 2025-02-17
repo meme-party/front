@@ -1,24 +1,26 @@
 "use client"
 
 import Button from "@/components/Button"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
 import Input from "@/components/Input"
 import MemeTypeButton from "@/components/MemeTypeButton"
 import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
+import TagSmallButton from "@/components/TagSmallButton"
 import Textarea from "@/components/Textarea"
 import ThumbnailCard from "@/components/ThumbnailCard"
-import { useToast } from "@/store/toast"
 import { COLORS } from "@/styles/colors"
 import { Heart, Search, Type } from "lucide-react"
+import { toast } from "sonner"
 
 export default function TestPage() {
-  const { showToast } = useToast()
-
   return (
     <section className="mx-[20px] my-[80px] flex flex-col gap-[12px]">
-      <button onClick={() => showToast({ text: "테스트", type: "warning" })}>auto close Toast</button>
-      <button onClick={() => showToast({ text: "테스트", type: "success", autoClose: false })}>Toast</button>
+      <Header />
+      <Footer />
+      <button onClick={() => toast.success("삭제가 완료되었습니다!")}>토스트 메세지</button>
       <MemeTypeButton
         title="텍스트밈"
         Icon={Type}
@@ -28,8 +30,10 @@ export default function TestPage() {
       <article className="flex gap-[12px]">
         <TagButton title="키워드" onClick={() => console.log("TagButton1 클릭")} />
         <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
+        <TagSmallButton title="ㄱ키워드" onClick={() => console.log("TagSmallButton1 클릭")} />
+        <TagSmallButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagSmallButton2 클릭")} />
       </article>
-      <Button className="w-[120px] text-white">컬렉션 1</Button>
+      <Button className="w-[120px] text-gray-scale-100">컬렉션 1</Button>
       <article className="flex gap-[12px]">
         <Input placeholder="컬렉션 이름을 검색해주세요" />
         <Input placeholder="메모 내용을 입력해주세요" className="border-none" />
@@ -47,8 +51,8 @@ export default function TestPage() {
         <SearchInput placeholder="아이콘 없는 검색 Input" onSearch={() => console.log("검색 이벤트!")} />
       </article>
       <article className="flex gap-[12px]">
-        <Textarea />
-        <Textarea className="border-none" />
+        <Textarea placeholder="메모를 입력해주세요" />
+        <Textarea placeholder="메모를 입력해주세요" className="border-none" />
       </article>
       <article className="flex gap-[12px]">
         <ThumbnailCard

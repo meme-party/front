@@ -7,11 +7,11 @@ import type { InputHTMLAttributes } from "react"
 
 export default function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <section className="relative flex w-fit items-center">
+    <section className="relative flex w-full items-center">
       <input
         {...props}
         className={cn(
-          "w-fit rounded-lg border border-primary-400 bg-gray-scale-800 p-4 font-semibold outline-none placeholder:text-gray",
+          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] text-gray-scale-100 outline-none placeholder:text-gray-scale-400",
           props.className
         )}
       />

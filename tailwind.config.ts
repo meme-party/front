@@ -38,6 +38,10 @@ export default {
           800: COLORS.GRAY_SCALE_800,
           900: COLORS.GRAY_SCALE_900
         },
+        "color-opacity": {
+          20: COLORS.COLOR_OPACITY_20,
+          60: COLORS.COLOR_OPACITY_60
+        },
         semantic: COLORS.SEMANTIC
       },
       fontWeight: {
@@ -59,6 +63,9 @@ export default {
         "h3-r": ["14px", { fontWeight: 400 }],
         "h4-m": ["12px", { fontWeight: 500 }],
         "h4-r": ["12px", { fontWeight: 400 }]
+      },
+      fontFamily: {
+        pretendard: ["var(--font-pretendard)"]
       }
     }
   },

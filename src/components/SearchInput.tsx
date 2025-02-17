@@ -19,17 +19,17 @@ export default function SearchInput({ onSearch, Icon, iconProps, ...props }: Par
   }
 
   return (
-    <section className="relative flex w-fit items-center">
+    <section className="relative flex w-full items-center">
       <input
         {...props}
         onKeyDown={handleKeyDown}
         className={cn(
-          "w-full rounded-lg border border-primary-400 bg-gray-scale-800 p-4 font-semibold outline-none placeholder:text-gray",
+          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] font-semibold outline-none placeholder:text-gray-scale-400",
           Icon && "pr-10",
           props.className
         )}
       />
-      {Icon && <IconButton onClick={onSearch} className="absolute end-2" Icon={Icon} iconProps={iconProps} />}
+      {Icon && <IconButton onClick={onSearch} className="absolute end-[8px]" Icon={Icon} iconProps={iconProps} />}
     </section>
   )
 }
