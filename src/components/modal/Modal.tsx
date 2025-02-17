@@ -18,7 +18,7 @@ export default function Modal() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className="relative rounded-lg bg-gray-scale-800 p-6 shadow-lg"
+        className="relative"
         onClick={(e) => e.stopPropagation()}
       >
         {content}

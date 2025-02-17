@@ -2,7 +2,7 @@
 import { useModalStore } from "@/store/modal"
 import ConfirmModal from "@/components/modal/ConfirmModal"
 import Button from "@/components/Button"
-import CollectionModal from "@/components/modal/CollectionModal"
+import CollectionModal from "@/components/modal/CollectionModal/CollectionModal"
 
 export default function Home() {
   const { openModal, closeModal } = useModalStore()
