@@ -1,18 +1,20 @@
 import Button from "@/components/Button"
-import { IoMdAdd } from "react-icons/io"
+import { FaPlus } from "react-icons/fa6"
 
 const Collections = ["컬렉션1", "컬렉션2", "컬렉션3", "컬렉션4"]
 
-export default function CollectionList() {
+type Props = {
+  onCreate: () => void
+}
+
+export default function CollectionList({ onCreate }: Props) {
   return (
     <>
       <div className="mt-[28px] flex flex-col gap-[40px]">
-        <Button className="bg-gray-scale-700 px-6 text-primary-300">
-          <div className="flex content-center gap-2">
-            <p className="text-sm">컬랙션 추가</p>
-            <p className="object-center">
-              <IoMdAdd />
-            </p>
+        <Button className="w-[148px] bg-gray-scale-700 px-[24px] py-[10px] text-primary-300">
+          <div className="flex items-center gap-[20px] text-h3-sb" onClick={() => onCreate()}>
+            <p>컬랙션 추가</p>
+            <FaPlus size={"14px"} />
           </div>
         </Button>
         <div>
