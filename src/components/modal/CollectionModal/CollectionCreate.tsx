@@ -10,7 +10,7 @@ export default function CollectionCreate() {
       </div>
       <div className="flex items-center justify-end">
         <Button className="h-[40px] w-[148px] bg-gray-scale-700 p-0">
-          <p className="text-h1-m text-gray-100">완료</p>
+          <p className="text-h1-m text-gray-scale-100">완료</p>
         </Button>
       </div>
     </>

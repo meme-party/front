@@ -9,7 +9,7 @@ type Props = {
 
 export default function ConfirmModal({ children, onCancel, onConfirm }: Props) {
   return (
-    <div className="flex flex-col gap-[56px] rounded-lg bg-gray-scale-800 stroke-primary-300 stroke-[1px] px-[38px] py-[44px] text-center">
+    <div className="flex flex-col gap-[56px] rounded-[12px] border-[0.5px] border-primary-300 bg-gray-scale-800 px-[38px] py-[44px] text-center">
       <div>{children}</div>
       <div className="flex justify-center gap-[24px]">
         <Button
