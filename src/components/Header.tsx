@@ -7,9 +7,9 @@ export default function Header() {
   // Todo 세션체크해서 닉네임, 버튼 조건부 렌더링
   return (
     // lg:px-[120px]
-    <section className="flex h-[94px] w-full items-end justify-between px-[16px] py-[12px] md:h-auto md:items-center md:px-[24px] md:py-[8px]">
+    <section className="flex h-[94px] w-full items-end justify-between border-b-[1px] border-b-gray-scale-700 px-[16px] py-[12px] md:h-auto md:items-center md:px-[24px] md:py-[8px]">
       <article className="relative h-[24px] w-[120px]">
-        <Image src={"/kakao.png"} alt="logo" fill />
+        <Image src={"/logo.png"} alt="logo" fill />
       </article>
       <article className="flex flex-row-reverse items-center gap-[24px] md:flex md:flex-row">
         <div className="flex items-center gap-[8px]">

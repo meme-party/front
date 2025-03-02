@@ -1,3 +1,4 @@
+import Header from "@/components/Header"
 import Toast from "@/components/Toast"
 import { Pretendard } from "@/fonts"
 import "@/styles/globals.css"
@@ -17,7 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(Pretendard.variable)}>
+      <body className={(cn(Pretendard.variable), "px-[120px]")}>
+        <Header />
         {children}
         <Toast />
       </body>
