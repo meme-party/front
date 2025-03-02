@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={(cn(Pretendard.variable), "px-[120px]")}>
+      <body className={(cn(Pretendard.variable), "px-[16px] md:px-[28px] lg:px-[120px]")}>
         <Header />
         {children}
         <Toast />
