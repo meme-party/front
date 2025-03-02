@@ -19,7 +19,7 @@ export default function Sidebar() {
   const activeItem = navItems.find((item) => item.href === pathname)
 
   return (
-    <section className="flex flex-col">
+    <section className="hidden flex-shrink-0 flex-col lg:flex">
       <section className="flex flex-col gap-[16px]">
         {activeItem && (
           <Link href={activeItem.href}>
