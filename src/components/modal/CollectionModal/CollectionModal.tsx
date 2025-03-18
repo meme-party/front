@@ -21,8 +21,8 @@ export default function CollectionModal({ onCancel }: Props) {
           <X />
         </div>
       </div>
-      <div className="flex flex-1 gap-[25px]">
-        <div className="w-[266px] flex-1 rounded-xl bg-black"></div>
+      <div className="flex flex-1 gap-[24px]">
+        <div className="w-[264px] flex-1 rounded-[12px] bg-black"></div>
         <div className="flex flex-1 flex-col justify-between">
           {isCreateMode ? <CollectionCreate /> : <CollectionList onCreate={() => setIsCreateMode(true)} />}
         </div>
