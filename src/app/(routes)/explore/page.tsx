@@ -8,7 +8,7 @@ import { COLORS } from "@/styles/colors"
 import { Search, Type } from "lucide-react"
 import dynamic from "next/dynamic"
 
-const Masonry = dynamic(() => import("@/components/Masonry"), { ssr: false })
+const MasonryExample = dynamic(() => import("@/components/MasonryExample"), { ssr: false })
 
 export default function ExplorePage() {
   return (
@@ -53,7 +53,7 @@ export default function ExplorePage() {
           <MoreViewButton title="인기 밈 TOP 100" onClick={() => console.log("인기 밈 TOP 100 클릭")} />
           <article className="flex flex-col gap-[8px]">
             <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">방금 올라온 따끈따끈한 밈</p>
-            <Masonry />
+            <MasonryExample />
           </article>
         </section>
         <section className="hidden lg:flex" />

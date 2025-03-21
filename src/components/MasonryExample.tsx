@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export default function Masonry() {
+export default function MasonryExample() {
   return (
     <section className="flex items-center justify-center">
       <section className="w-full columns-2 break-inside-avoid gap-[8px] sm:columns-3">
