@@ -1,6 +1,7 @@
 "use client"
 
 import { COLORS } from "@/styles/colors"
+import { cn } from "@/utils/cn"
 import { Grid2X2, House, PanelBottomOpen } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -25,7 +26,7 @@ export default function Sidebar() {
           <Link href={activeItem.href}>
             <article className="flex items-center gap-[12px]">
               {React.cloneElement(activeItem.icon, { size: 48 })}
-              <p className="">{activeItem.label}</p>
+              <p className="text-webTitle text-gray-scale-100">{activeItem.label}</p>
             </article>
           </Link>
         )}
@@ -34,7 +35,9 @@ export default function Sidebar() {
           <Link key={href} href={href}>
             <article className="ms-[8px] flex items-center gap-[12px]">
               {icon}
-              <p>{label}</p>
+              <p className={cn("text-h1-sb", label === activeItem?.label ? "text-primary-300" : "text-gray-scale-100")}>
+                {label}
+              </p>
             </article>
           </Link>
         ))}

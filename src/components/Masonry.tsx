@@ -3,7 +3,7 @@ import Image from "next/image"
 export default function Masonry() {
   return (
     <section className="flex items-center justify-center">
-      <section className="columns-2 break-inside-avoid gap-[8px] sm:columns-3">
+      <section className="w-full columns-2 break-inside-avoid gap-[8px] sm:columns-3">
         {Array.from({ length: 100 }).map((_, index) => (
           <Images key={index} src={getRandomImage()} />
         ))}

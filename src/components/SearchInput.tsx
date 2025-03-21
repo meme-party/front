@@ -24,7 +24,7 @@ export default function SearchInput({ onSearch, Icon, iconProps, ...props }: Par
         {...props}
         onKeyDown={handleKeyDown}
         className={cn(
-          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] font-semibold outline-none placeholder:text-gray-scale-400",
+          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] text-h3-r outline-none placeholder:text-gray-scale-400 md:text-h2-r",
           Icon && "pr-10",
           props.className
         )}
