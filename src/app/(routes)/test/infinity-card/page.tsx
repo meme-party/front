@@ -4,7 +4,7 @@ import Button from "@/components/Button"
 import IconButton from "@/components/IconButton"
 import { COLORS } from "@/styles/colors"
 import { cn } from "@/utils/cn"
-import { Heart } from "lucide-react"
+import { Heart, LucideProps } from "lucide-react"
 import { ComponentType, ReactNode, SVGProps, useEffect, useRef, useState } from "react"
 
 type Props = {
@@ -78,6 +78,7 @@ const MasonryLayout = () => {
         setMansornyCol((col) => ({ ...col, 1: [...col["1"], { id: index, text: "텍스트 밈 ".repeat(card) }] }))
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const increaseCardsList = () => {
@@ -132,6 +133,7 @@ const MasonryLayout = () => {
   }
   useEffect(() => {
     dealWithCards()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardsNumberList])
 
   const showHeight = () => {

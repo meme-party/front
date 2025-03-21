@@ -6,6 +6,12 @@ on:
       NODE_VERSION:
         required: true
         type: string
+  workflow_dispatch:
+    inputs:
+      NODE_VERSION:
+        description: "Node version for the build"
+        required: false
+        default: "22.x"
 
 jobs:
   build:
