@@ -8,11 +8,13 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "all-format": "prettier --write ."
+    "all-format": "prettier --write .",
+    "openapi": "dotenv -e .env -- cross-var openapi-generator generate -i %NEXT_PUBLIC_API_URL%api/schema -g typescript-fetch -o ./models -c ./openapi.json --skip-validate-spec"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
+    "dotenv-cli": "^8.0.0",
     "ky": "^1.7.5",
     "lucide-react": "^0.471.0",
     "motion": "^11.17.0",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@openapitools/openapi-generator-cli": "^2.18.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
