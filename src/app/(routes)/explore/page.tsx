@@ -1,5 +1,6 @@
 // Todo page.tsx 에서 use client 로직 분리
 "use client"
+import { fetcher } from "@/api/fetcher"
 import MemeTypeButton from "@/components/MemeTypeButton"
 import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
@@ -7,10 +8,15 @@ import Sidebar from "@/components/Sidebar"
 import { COLORS } from "@/styles/colors"
 import { Search, Type } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useEffect } from "react"
 
 const MasonryExample = dynamic(() => import("@/components/MasonryExample"), { ssr: false })
 
 export default function ExplorePage() {
+  useEffect(() => {
+    fetcher.get("api/v1/memes")
+  }, [])
+
   return (
     <section className="my-[32px] lg:my-[60px]">
       <section className="flex justify-center lg:justify-between">

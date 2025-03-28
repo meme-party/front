@@ -12,6 +12,7 @@
     "openapi": "openapi-generator-cli generate -i https://alpha-api.memez.party/api/schema -g typescript-fetch -o ./models -c ./openapi.json --skip-validate-spec"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.69.0",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
     "ky": "^1.7.5",

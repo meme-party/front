@@ -1,4 +1,4 @@
 export const COOKIE_KEY = {
-  ACCESS_TOKEN: "accessToken",
-  REFRESH_TOKEN: "refreshToken"
+  ACCESS_TOKEN: "access",
+  REFRESH_TOKEN: "refresh"
 } as const

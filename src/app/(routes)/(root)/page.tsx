@@ -1,6 +1,6 @@
 import { getUser, verifyToken } from "@/api/user"
-import useDidMountEffect from "@/app/hooks/useDidMountEffect"
 import Sidebar from "@/components/Sidebar"
+import useDidMountEffect from "@/hooks/useDidMountEffect"
 
 export default function Home() {
   useDidMountEffect(() => {
