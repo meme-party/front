@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "cookies-next": "^5.1.0",
     "ky": "^1.7.5",
     "lucide-react": "^0.471.0",
     "motion": "^11.17.0",
