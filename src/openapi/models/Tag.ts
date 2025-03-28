@@ -40,6 +40,24 @@ export interface Tag {
    * @memberof Tag
    */
   category: TagCategory
+  /**
+   *
+   * @type {number}
+   * @memberof Tag
+   */
+  readonly popularity: number
+  /**
+   *
+   * @type {number}
+   * @memberof Tag
+   */
+  readonly memesCount: number
+  /**
+   *
+   * @type {number}
+   * @memberof Tag
+   */
+  readonly bookmarkingsCount: number
 }
 
 /**
@@ -49,6 +67,9 @@ export function instanceOfTag(value: object): value is Tag {
   if (!("id" in value) || value["id"] === undefined) return false
   if (!("name" in value) || value["name"] === undefined) return false
   if (!("category" in value) || value["category"] === undefined) return false
+  if (!("popularity" in value) || value["popularity"] === undefined) return false
+  if (!("memesCount" in value) || value["memesCount"] === undefined) return false
+  if (!("bookmarkingsCount" in value) || value["bookmarkingsCount"] === undefined) return false
   return true
 }
 
@@ -63,7 +84,10 @@ export function TagFromJSONTyped(json: any, ignoreDiscriminator: boolean): Tag {
   return {
     id: json["id"],
     name: json["name"],
-    category: TagCategoryFromJSON(json["category"])
+    category: TagCategoryFromJSON(json["category"]),
+    popularity: json["popularity"],
+    memesCount: json["memes_count"],
+    bookmarkingsCount: json["bookmarkings_count"]
   }
 }
 
@@ -71,7 +95,10 @@ export function TagToJSON(json: any): Tag {
   return TagToJSONTyped(json, false)
 }
 
-export function TagToJSONTyped(value?: Omit<Tag, "id"> | null, ignoreDiscriminator: boolean = false): any {
+export function TagToJSONTyped(
+  value?: Omit<Tag, "id" | "popularity" | "memes_count" | "bookmarkings_count"> | null,
+  ignoreDiscriminator: boolean = false
+): any {
   if (value == null) {
     return value
   }

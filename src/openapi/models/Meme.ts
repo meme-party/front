@@ -47,7 +47,7 @@ export interface Meme {
    * @type {TypeEnum}
    * @memberof Meme
    */
-  type?: TypeEnum
+  type: TypeEnum
   /**
    *
    * @type {string}
@@ -128,6 +128,7 @@ export interface Meme {
 export function instanceOfMeme(value: object): value is Meme {
   if (!("id" in value) || value["id"] === undefined) return false
   if (!("title" in value) || value["title"] === undefined) return false
+  if (!("type" in value) || value["type"] === undefined) return false
   if (!("description" in value) || value["description"] === undefined) return false
   if (!("thumbnail" in value) || value["thumbnail"] === undefined) return false
   if (!("audio" in value) || value["audio"] === undefined) return false
@@ -149,7 +150,7 @@ export function MemeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Meme
   return {
     id: json["id"],
     title: json["title"],
-    type: json["type"] == null ? undefined : TypeEnumFromJSON(json["type"]),
+    type: TypeEnumFromJSON(json["type"]),
     description: json["description"],
     thumbnailId: json["thumbnail_id"] == null ? undefined : json["thumbnail_id"],
     thumbnail: ThumbnailFromJSON(json["thumbnail"]),
