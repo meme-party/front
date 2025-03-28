@@ -11,7 +11,7 @@ export default function Input(props: InputHTMLAttributes<HTMLInputElement>) {
       <input
         {...props}
         className={cn(
-          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] text-gray-scale-100 outline-none placeholder:text-gray-scale-400",
+          "w-full rounded-[8px] border border-primary-400 bg-gray-scale-800 px-[16px] py-[12px] text-h3-r outline-none placeholder:text-gray-scale-400 md:text-h2-r",
           props.className
         )}
       />
