@@ -1,3 +1,4 @@
+"use client"
 import { getUser, verifyToken } from "@/api/user"
 import Sidebar from "@/components/Sidebar"
 import useDidMountEffect from "@/hooks/useDidMountEffect"
