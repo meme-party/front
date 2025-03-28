@@ -1,5 +1,4 @@
-import { getAccessToken } from "@/api/getAccessToken"
-import { removeAuthCookies } from "@/api/removeAuthCookies"
+import { deleteAccessToken, getAccessToken } from "@/api/getAuthToken"
 import ky, { type Options } from "ky"
 import { redirect } from "next/navigation"
 
@@ -13,7 +12,7 @@ export const instance = ky.create({
   hooks: {
     beforeRequest: [
       async (request) => {
-        const accessToken = await getAccessToken()
+        const accessToken = getAccessToken()
         if (accessToken) {
           request.headers.set("Authorization", `Bearer ${accessToken}`)
         }
@@ -21,8 +20,8 @@ export const instance = ky.create({
     ],
     afterResponse: [
       async (_request, _options, response) => {
-        if (response.status === 401) {
-          await removeAuthCookies()
+        if (response.status === 401 || response.status === 403) {
+          deleteAccessToken()
           if (typeof window === "undefined") {
             redirect("/")
           } else {
