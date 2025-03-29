@@ -11,7 +11,9 @@ import dynamic from "next/dynamic"
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
 
 export default function ExploreContents() {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery()
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery({
+    perPage: 20
+  })
 
   return (
     <>
@@ -60,6 +62,7 @@ export default function ExploreContents() {
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
           />
+          {/* <MasonryExample /> */}
         </article>
       </section>
       <section className="hidden lg:flex" />

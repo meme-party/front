@@ -3,9 +3,9 @@
 "use client"
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query"
-import Image from "next/image"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
+import ThumbnailCard from "./ThumbnailCard"
 
 interface Params {
   data?: InfiniteData<PaginatedMemeList, unknown> | undefined
@@ -34,23 +34,17 @@ export default function MemeMasonry({ data, fetchNextPage, isLoading, hasNextPag
     <section className="relative flex items-center justify-center">
       <section className="w-full columns-2 break-inside-avoid gap-[8px] sm:columns-3">
         {data?.pages?.map((page, pageIndex) => (
-          <div key={pageIndex} className="mb-[8px]">
+          <div key={pageIndex}>
             {page.results.map((result) => (
-              <div className="relative mb-[8px]" key={result.id}>
-                <Image
-                  src={result.thumbnail.url ?? "/"}
-                  width={224}
-                  height={0}
-                  alt={result.title}
-                  className="object-contain"
-                />
+              <div className="relative mb-[8px] break-inside-avoid" key={result.id}>
+                <ThumbnailCard data={result} />
               </div>
             ))}
           </div>
         ))}
       </section>
       {!isFetchingNextPage && (
-        <div ref={ref} className="pointer-events-none absolute bottom-[400px] h-[4px] w-full opacity-0" />
+        <div ref={ref} className="pointer-events-none absolute bottom-[200px] h-[4px] w-full bg-red-500 opacity-100" />
       )}
     </section>
   )

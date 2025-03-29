@@ -10,9 +10,8 @@ import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import TagSmallButton from "@/components/TagSmallButton"
 import Textarea from "@/components/Textarea"
-import ThumbnailCard from "@/components/ThumbnailCard"
 import { COLORS } from "@/styles/colors"
-import { Heart, Search, Type } from "lucide-react"
+import { Search, Type } from "lucide-react"
 import { toast } from "sonner"
 
 export default function TestPage() {
@@ -54,26 +53,6 @@ export default function TestPage() {
         <Textarea placeholder="메모를 입력해주세요" />
         <Textarea placeholder="메모를 입력해주세요" className="border-none" />
       </article>
-      <article className="flex gap-[12px]">
-        <ThumbnailCard
-          type="text"
-          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
-          Icon={Heart}
-          iconProps={{ color: COLORS.PRIMARY }}
-        />
-        <ThumbnailCard
-          type="text"
-          text="텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈 텍스트 밈"
-          Icon={Heart}
-          iconProps={{ color: COLORS.PRIMARY, fill: COLORS.PRIMARY }}
-          like
-        />
-      </article>
-      <article className="flex gap-[12px]">
-        <ThumbnailCard type="image" url="/cat.png" />
-        <ThumbnailCard type="image" url="/kakao.png" />
-      </article>
-      <ThumbnailCard type="video" url="비디오는 어떻게 보여주는게 좋을까요?" />
     </section>
   )
 }
