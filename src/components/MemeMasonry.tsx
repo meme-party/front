@@ -2,6 +2,7 @@
 
 "use client"
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
+import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid"
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
@@ -31,18 +32,16 @@ export default function MemeMasonry({ data, fetchNextPage, isLoading, hasNextPag
   if (isLoading) return <section className="h-[100vh] bg-red-50" />
 
   return (
-    <section className="relative flex min-h-[100vh] items-start justify-center">
-      <section className="w-full columns-2 break-inside-avoid gap-[8px] sm:columns-3">
-        {data?.pages?.map((page, pageIndex) => (
-          <div key={pageIndex} className="mb-[8px]">
-            {page.results.map((result) => (
-              <div className="relative mb-[8px] break-inside-avoid" key={result.id}>
-                <ThumbnailCard data={result} />
-              </div>
-            ))}
-          </div>
-        ))}
-      </section>
+    <section className="relative min-h-[100vh]">
+      <MasonryInfiniteGrid gap={8} resizeDebounce={100}>
+        {data?.pages
+          ?.flatMap((page) => page.results)
+          .map((result) => (
+            <div className="w-[calc(50%_-_4px)] md:w-[calc(33.333%_-_5.3px)]" key={result.id}>
+              <ThumbnailCard data={result} key={result.id} />
+            </div>
+          ))}
+      </MasonryInfiniteGrid>
       {!isFetchingNextPage && (
         <div ref={ref} className="pointer-events-none absolute bottom-[200px] h-[4px] w-full bg-red-500 opacity-100" />
       )}

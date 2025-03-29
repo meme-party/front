@@ -31,7 +31,7 @@ export default function ThumbnailCard({ data, Icon = Heart, iconProps = { color:
           alt={data.title}
           width={224}
           height={0}
-          className="rounded-[8px] object-contain"
+          className="self-center rounded-[8px] object-contain"
         />
       )}
       {data.type === TypeEnum.Video && <p>{data.title}</p>}

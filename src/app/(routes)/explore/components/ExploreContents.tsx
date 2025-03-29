@@ -62,7 +62,6 @@ export default function ExploreContents() {
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
           />
-          {/* <MasonryExample /> */}
         </article>
       </section>
       <section className="hidden lg:flex" />

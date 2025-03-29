@@ -14,6 +14,7 @@
     "openapi-cleanup": "openapi-generator-cli generate && node cleanup-openapi.js && tsc"
   },
   "dependencies": {
+    "@egjs/react-infinitegrid": "^4.12.0",
     "@tanstack/react-query": "^5.69.0",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
