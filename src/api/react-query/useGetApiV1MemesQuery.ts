@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import { InfiniteData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { ApiV1MemesListRequest } from "@/openapi/apis/ApiApi" // 요청 파라미터 타입
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList" // 응답 타입
 import { getApiV1Memes } from "../getApiV1Memes"
@@ -11,7 +11,7 @@ export const useGetApiV1MemesQuery = (params?: ApiV1MemesListRequest) => {
 }
 
 export const useGetApiV1MemesInfiniteQuery = (params?: ApiV1MemesListRequest) => {
-  return useInfiniteQuery<PaginatedMemeList, Error, PaginatedMemeList>({
+  return useInfiniteQuery<PaginatedMemeList, Error, InfiniteData<PaginatedMemeList>>({
     queryKey: ["memes", params],
     queryFn: ({ pageParam = 1 }) => {
       const updatedParams: ApiV1MemesListRequest = {
@@ -28,6 +28,6 @@ export const useGetApiV1MemesInfiniteQuery = (params?: ApiV1MemesListRequest) =>
       }
       return undefined
     },
-    initialPageParam: 1 // 첫 페이지는 1번 페이지로 설정
+    initialPageParam: 1
   })
 }
