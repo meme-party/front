@@ -31,10 +31,10 @@ export default function MemeMasonry({ data, fetchNextPage, isLoading, hasNextPag
   if (isLoading) return <section className="h-[100vh] bg-red-50" />
 
   return (
-    <section className="relative flex items-center justify-center">
+    <section className="relative flex min-h-[100vh] items-start justify-center">
       <section className="w-full columns-2 break-inside-avoid gap-[8px] sm:columns-3">
         {data?.pages?.map((page, pageIndex) => (
-          <div key={pageIndex}>
+          <div key={pageIndex} className="mb-[8px]">
             {page.results.map((result) => (
               <div className="relative mb-[8px] break-inside-avoid" key={result.id}>
                 <ThumbnailCard data={result} />
