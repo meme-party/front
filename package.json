@@ -10,7 +10,8 @@
     "lint": "next lint",
     "prepare": "husky",
     "all-format": "prettier --write .",
-    "openapi": "openapi-generator-cli generate && node cleanup-openapi.js && tsc"
+    "openapi": "openapi-generator-cli generate && tsc",
+    "openapi-cleanup": "openapi-generator-cli generate && node cleanup-openapi.js && tsc"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.69.0",
@@ -22,6 +23,7 @@
     "next": "15.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-intersection-observer": "^9.16.0",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "zustand": "^5.0.2"
