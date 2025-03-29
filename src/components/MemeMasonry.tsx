@@ -1,3 +1,5 @@
+// Todo 텍스트, 비디오 UI 구현
+
 "use client"
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query"
@@ -22,7 +24,7 @@ export default function MemeMasonry({ data, fetchNextPage, isLoading, hasNextPag
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      // fetchNextPage()
+      fetchNextPage()
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
@@ -35,7 +37,13 @@ export default function MemeMasonry({ data, fetchNextPage, isLoading, hasNextPag
           <div key={pageIndex} className="mb-[8px]">
             {page.results.map((result) => (
               <div className="relative mb-[8px]" key={result.id}>
-                <Image src={"/cat.png"} width={224} height={0} alt={result.title} className="object-contain" />
+                <Image
+                  src={result.thumbnail.url ?? "/"}
+                  width={224}
+                  height={0}
+                  alt={result.title}
+                  className="object-contain"
+                />
               </div>
             ))}
           </div>
