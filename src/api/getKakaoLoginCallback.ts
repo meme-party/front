@@ -1,4 +1,4 @@
-import { KakaoAuthResponse } from "../../models/models/KakaoAuthResponse"
+import { KakaoAuthResponse } from "@/openapi/models/KakaoAuthResponse"
 import { fetcher } from "./fetcher"
 
 export function getKakaoLoginCallback(code: string) {

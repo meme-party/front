@@ -1,6 +1,11 @@
 import { deleteAccessToken, getAccessToken } from "@/api/getAuthToken"
+import { Configuration } from "@/openapi/runtime"
 import ky, { type Options } from "ky"
 import { redirect } from "next/navigation"
+
+export const configuration = new Configuration({
+  basePath: process.env.NEXT_PUBLIC_API_URL
+})
 
 export const instance = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL ?? "",
