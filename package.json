@@ -10,8 +10,7 @@
     "lint": "next lint",
     "prepare": "husky",
     "all-format": "prettier --write .",
-    "openapi": "openapi-generator-cli generate && tsc",
-    "openapi-cleanup": "openapi-generator-cli generate && node cleanup-openapi.js && tsc"
+    "openapi": "openapi-generator-cli generate && tsc"
   },
   "dependencies": {
     "@egjs/react-infinitegrid": "^4.12.0",
