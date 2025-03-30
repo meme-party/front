@@ -9,9 +9,10 @@
     "lint": "next lint",
     "prepare": "husky",
     "all-format": "prettier --write .",
-    "openapi": "openapi-generator-cli generate -i https://alpha-api.memez.party/api/schema -g typescript-fetch -o ./models -c ./openapi.json --skip-validate-spec"
+    "openapi": "openapi-generator-cli generate && tsc"
   },
   "dependencies": {
+    "@egjs/react-infinitegrid": "^4.12.0",
     "@tanstack/react-query": "^5.69.0",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
@@ -21,6 +22,7 @@
     "next": "^15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-intersection-observer": "^9.16.0",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "zustand": "^5.0.2"
