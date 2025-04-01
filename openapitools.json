@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.12.0",
+    "generators": {
+      "meme-api": {
+        "generatorName": "typescript-fetch",
+        "inputSpec": "https://alpha-api.memez.party/api/schema",
+        "skipValidateSpec": true,
+        "output": "./src/openapi",
+        "generateAliasAsModel": true,
+        "additional-properties": {
+          "supportsES6": true,
+          "useSingleRequestParameter": true,
+          "withSeparateModelsAndApi": true,
+          "apiPackage": "api",
+          "modelPackage": "models"
+        }
+      }
+    }
+  }
+}

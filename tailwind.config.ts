@@ -1,10 +1,11 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
+import { COLORS } from "./src/styles/colors"
 
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
     extend: {
@@ -12,21 +13,61 @@ export default {
         sm: "375px",
         md: "768px",
         lg: "1080px",
-        xl: "1440px",
+        xl: "1440px"
+      },
+      dropShadow: {
+        toast: "0 -10px 24px rgba(0, 0, 0, 0.6)",
+        thumbnail: "0 2px 4px rgba(203, 199, 203, 0.2)"
       },
       colors: {
-        // Todo 필요한 color 들 추가
         primary: {
-          DEFAULT: "#CA3D7D",
-          100: "#FFBED7",
-          200: "#FF7CAE",
-          300: "#FF3791",
-          400: "#CA3D7D",
-          500: "#932D5B",
-          600: "#5D203B",
+          DEFAULT: COLORS.PRIMARY,
+          300: COLORS.PRIMARY_300,
+          400: COLORS.PRIMARY_400,
+          500: COLORS.PRIMARY_500,
+          600: COLORS.PRIMARY_600
         },
+        "gray-scale": {
+          100: COLORS.GRAY_SCALE_100,
+          200: COLORS.GRAY_SCALE_200,
+          300: COLORS.GRAY_SCALE_300,
+          400: COLORS.GRAY_SCALE_400,
+          500: COLORS.GRAY_SCALE_500,
+          600: COLORS.GRAY_SCALE_600,
+          700: COLORS.GRAY_SCALE_700,
+          800: COLORS.GRAY_SCALE_800,
+          900: COLORS.GRAY_SCALE_900
+        },
+        "color-opacity": {
+          20: COLORS.COLOR_OPACITY_20,
+          60: COLORS.COLOR_OPACITY_60
+        },
+        semantic: COLORS.SEMANTIC
       },
-    },
+      fontWeight: {
+        bold: "700",
+        semibold: "600",
+        medium: "500",
+        regular: "400"
+      },
+      fontSize: {
+        webTitle: ["28px", { fontWeight: 600 }],
+        "h1-sb": ["20px", { fontWeight: 600 }],
+        "h1-m": ["20px", { fontWeight: 500 }],
+        "h2-b": ["16px", { fontWeight: 700 }],
+        "h2-sb": ["16px", { fontWeight: 600 }],
+        "h2-m": ["16px", { fontWeight: 500 }],
+        "h2-r": ["16px", { fontWeight: 400 }],
+        "h3-sb": ["14px", { fontWeight: 600 }],
+        "h3-m": ["14px", { fontWeight: 500 }],
+        "h3-r": ["14px", { fontWeight: 400 }],
+        "h4-m": ["12px", { fontWeight: 500 }],
+        "h4-r": ["12px", { fontWeight: 400 }]
+      },
+      fontFamily: {
+        pretendard: ["var(--font-pretendard)"]
+      }
+    }
   },
-  plugins: [],
-} satisfies Config;
+  plugins: []
+} satisfies Config
