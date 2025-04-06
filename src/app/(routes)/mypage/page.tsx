@@ -10,9 +10,12 @@ export default function MyPage() {
   const [isSetting, setIsSetting] = useState<boolean>(false)
   return (
     <>
-      <section className="flex w-full max-w-[712px] flex-col gap-[32px] lg:mt-[80px]">
+      <section className={`flex w-full max-w-[712px] flex-col gap-[32px] ${!isSetting && "lg:mt-[80px]"}`}>
         {isSetting && (
-          <div className="flex cursor-pointer gap-[8px] text-h3-r text-primary-400" onClick={() => setIsSetting(false)}>
+          <div
+            className="mb-[24px] flex cursor-pointer gap-[8px] text-h3-r text-primary-400"
+            onClick={() => setIsSetting(false)}
+          >
             <ChevronLeft />
             <p>이전으로</p>
           </div>
