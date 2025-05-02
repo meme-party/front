@@ -6,6 +6,7 @@ import SearchInput from "@/components/SearchInput"
 import { COLORS } from "@/styles/colors"
 import { Search, Type } from "lucide-react"
 import dynamic from "next/dynamic"
+import { useRouter } from "next/navigation"
 // import MemeMasonry from "@/components/MemeMasonry"
 
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
@@ -14,6 +15,8 @@ export default function ExploreContents() {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery({
     perPage: 20
   })
+
+  const router = useRouter()
 
   return (
     <>
@@ -36,23 +39,23 @@ export default function ExploreContents() {
               title="텍스트밈"
               Icon={Type}
               iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => console.log("밈 타입 버튼 클릭")}
+              onClick={() => router.push("/explore/text")}
             />
             <MemeTypeButton
               title="이미지/GIF 밈"
               Icon={Type}
               iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => console.log("밈 타입 버튼 클릭")}
+              onClick={() => router.push("/explore/image")}
             />
             <MemeTypeButton
               title="비디오 밈"
               Icon={Type}
               iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => console.log("밈 타입 버튼 클릭")}
+              onClick={() => router.push("/explore/video")}
             />
           </article>
         </section>
-        <MoreViewButton title="인기 밈 TOP 100" onClick={() => console.log("인기 밈 TOP 100 클릭")} />
+        <MoreViewButton title="인기 밈 TOP 100" onClick={() => router.push("/explore/popularity")} />
         <article className="flex flex-col gap-[8px]">
           <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">방금 올라온 따끈따끈한 밈</p>
           <MemeMasonry

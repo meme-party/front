@@ -12,7 +12,7 @@ export default function TagButton({ title, variant = "default", ...buttonProps }
     <Button
       {...buttonProps}
       className={cn(
-        "w-fit rounded-[8px] bg-gray-scale-700 px-[16px] py-[8px]",
+        "w-fit rounded-[8px] bg-gray-scale-700 px-[8px] py-[8px] md:px-[16px]",
         variant === "colored"
           ? "border border-primary-400 text-h2-m text-primary-300"
           : "text-h2-sb text-gray-scale-200",
