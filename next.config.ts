@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
       },
       // end region temporary
       {
+        protocol: "http",
+        hostname: "alpha-api.memez.party"
+      },
+      {
         protocol: "https",
         hostname: "alpha-api.memez.party"
       },
