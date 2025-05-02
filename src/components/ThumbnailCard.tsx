@@ -1,3 +1,4 @@
+"use client"
 import { Heart, type LucideProps } from "lucide-react"
 import type { ComponentType, SVGProps } from "react"
 import IconButton from "./IconButton"
@@ -6,6 +7,7 @@ import Image from "next/image"
 import { COLORS } from "@/styles/colors"
 import { TypeEnum } from "@/openapi/models/TypeEnum"
 import { Meme } from "@/openapi/models/Meme"
+import { useRouter } from "next/navigation"
 
 interface Params {
   data: Meme
@@ -16,12 +18,14 @@ interface Params {
 }
 
 export default function ThumbnailCard({ data, Icon = Heart, iconProps = { color: COLORS.PRIMARY } }: Params) {
+  const router = useRouter()
   return (
     <section
       className={cn(
-        "relative flex h-fit flex-col gap-[24px] break-all rounded-[8px] bg-gray-scale-700 p-[16px]"
+        "relative flex h-fit cursor-pointer flex-col gap-[24px] break-all rounded-[8px] bg-gray-scale-700 p-[16px]"
         // like && "border border-primary drop-shadow-thumbnail"
       )}
+      onClick={() => router.push(`/detail/${data.id}`)}
     >
       {Icon && <IconButton Icon={Icon} iconProps={iconProps} className="self-end" />}
       {data.type === TypeEnum.Text && <p>{data.title}</p>}
