@@ -6,6 +6,8 @@ import AccountSetting from "./components/AccountSetting"
 import { ChevronLeft, ArrowRight } from "lucide-react"
 import Button from "@/components/Button"
 
+export const dynamic = "force-dynamic"
+
 export default function MyPage() {
   const [isSetting, setIsSetting] = useState<boolean>(false)
   return (

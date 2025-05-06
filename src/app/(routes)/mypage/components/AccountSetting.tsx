@@ -1,3 +1,5 @@
+"use client"
+
 import SettingButton from "./SettingButton"
 
 export default function AccountSetting() {
