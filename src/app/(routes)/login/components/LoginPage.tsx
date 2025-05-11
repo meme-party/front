@@ -5,9 +5,9 @@ import Link from "next/link"
 const jsKey = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY
 const redirectUri = process.env.NEXT_PUBLIC_LOGIN_REDIRECT_URI
 
-// * 추 후 스피너 구현 시 필요해보임
-// { isProcess = false }: { isProcess?: boolean }
-export default function LoginPage() {
+export default function LoginPage({ isProcess = false }: { isProcess?: boolean }) {
+  // Todo 스피너 디자인 결정되면 구현
+  console.log(isProcess)
   return (
     <section className="my-[60px]">
       <section className="flex justify-center lg:justify-between">
