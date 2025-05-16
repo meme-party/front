@@ -16,8 +16,13 @@ export default function Sidebar() {
     { href: "/drawer", label: "서랍", icon: <PanelBottomOpen color={COLORS.PRIMARY_300} size={30} /> }
   ]
 
-  // 현재 경로에 해당하는 항목 찾기
-  const activeItem = navItems.find((item) => item.href === pathname)
+  // 현재 경로에 해당하는 항목 처리
+  const activeItem = navItems.find((item) => {
+    if (item.href === "/") {
+      return pathname === "/"
+    }
+    return pathname.startsWith(item.href)
+  })
 
   return (
     <section className="hidden flex-shrink-0 flex-col lg:flex">
