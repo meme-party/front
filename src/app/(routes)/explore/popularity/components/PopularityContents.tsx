@@ -2,6 +2,7 @@
 import { useGetApiV1MemesInfiniteQuery } from "@/api/react-query/useGetApiV1MemesQuery"
 import SearchInput from "@/components/SearchInput"
 import { COLORS } from "@/styles/colors"
+import { createQueryUrl } from "@/utils/createQueryUrl"
 import { ChevronLeft, Search } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
@@ -31,7 +32,7 @@ export default function PopularityContents() {
           </div>
           <SearchInput
             placeholder="검색어를 입력해주세요"
-            onSearch={() => console.log("검색 이벤트!")}
+            onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
             Icon={Search}
             iconProps={{ color: COLORS.PRIMARY }}
           />

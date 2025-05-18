@@ -4,6 +4,7 @@ import MemeTypeButtonSection from "@/components/MemeTypeButtonSection"
 import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
 import { COLORS } from "@/styles/colors"
+import { createQueryUrl } from "@/utils/createQueryUrl"
 import { Search } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
@@ -23,7 +24,7 @@ export default function ExploreContents() {
       <section className="flex w-full max-w-[712px] flex-col gap-[32px] lg:mt-[80px]">
         <SearchInput
           placeholder="검색어를 입력해주세요"
-          onSearch={(value) => router.push(`/explore/search?${value}`)}
+          onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
           Icon={Search}
           iconProps={{ color: COLORS.PRIMARY }}
         />

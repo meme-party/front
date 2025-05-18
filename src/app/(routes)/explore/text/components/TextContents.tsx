@@ -6,6 +6,7 @@ import { ChevronLeft, Search } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import OrderingToggle from "@/app/(routes)/explore/components/OrderingToggle"
+import { createQueryUrl } from "@/utils/createQueryUrl"
 // import MemeMasonry from "@/components/MemeMasonry"
 
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
@@ -33,7 +34,7 @@ export default function TextContents() {
           </div>
           <SearchInput
             placeholder="검색어를 입력해주세요"
-            onSearch={() => console.log("검색 이벤트!")}
+            onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
             Icon={Search}
             iconProps={{ color: COLORS.PRIMARY }}
           />
