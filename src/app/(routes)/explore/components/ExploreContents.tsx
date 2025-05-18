@@ -1,10 +1,10 @@
 "use client"
 import { useGetApiV1MemesInfiniteQuery } from "@/api/react-query/useGetApiV1MemesQuery"
-import MemeTypeButton from "@/components/MemeTypeButton"
+import MemeTypeButtonSection from "@/components/MemeTypeButtonSection"
 import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
 import { COLORS } from "@/styles/colors"
-import { Search, Type } from "lucide-react"
+import { Search } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 // import MemeMasonry from "@/components/MemeMasonry"
@@ -34,26 +34,7 @@ export default function ExploreContents() {
               찾고 있는 밈을 텍스트, 이미지/GIF, 비디오 유형으로 빠르게 찾아봐요!
             </p>
           </div>
-          <article className="flex gap-[20px]">
-            <MemeTypeButton
-              title="텍스트밈"
-              Icon={Type}
-              iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => router.push("/explore/text")}
-            />
-            <MemeTypeButton
-              title="이미지/GIF 밈"
-              Icon={Type}
-              iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => router.push("/explore/image")}
-            />
-            <MemeTypeButton
-              title="비디오 밈"
-              Icon={Type}
-              iconProps={{ size: 24, color: COLORS.DARK, className: "flex-shrink-0" }}
-              onClick={() => router.push("/explore/video")}
-            />
-          </article>
+          <MemeTypeButtonSection />
         </section>
         <MoreViewButton title="인기 밈 TOP 100" onClick={() => router.push("/explore/popularity")} />
         <article className="flex flex-col gap-[8px]">
