@@ -1,5 +1,6 @@
 "use client"
 import { useGetApiV1MemesInfiniteQuery } from "@/api/react-query/useGetApiV1MemesQuery"
+import { useGetApiV1TagsQuery } from "@/api/react-query/useGetApiV1TagsQuery"
 import SearchInput from "@/components/SearchInput"
 import TagButton from "@/components/TagButton"
 import { COLORS } from "@/styles/colors"
@@ -20,6 +21,10 @@ export default function SearchContents() {
     perPage: 20
   })
 
+  const { data: tags, isLoading: isLoadingTags } = useGetApiV1TagsQuery({
+    search: keyword ?? ""
+  })
+
   const router = useRouter()
 
   return (
@@ -33,22 +38,25 @@ export default function SearchContents() {
           defaultValue={keyword?.toString()}
         />
         <article className="flex flex-col gap-[8px] md:gap-[16px]">
-          <p className="text-h4-r text-gray-scale-400 md:text-h2-r">총 5개의 검색 관련 키워드</p>
-          <article className="flex flex-wrap gap-[8px] md:gap-[16px]">
-            <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-            <TagButton
-              title="키워드키워드키워드키워드키워드키워드키워드키워드키워드키워드키워드키"
-              variant="colored"
-              onClick={() => console.log("TagButton2 클릭")}
-            />
-            <TagButton
-              title="키워드키워드키워드키워드"
-              variant="colored"
-              onClick={() => console.log("TagButton2 클릭")}
-            />
-            <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-            <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-          </article>
+          <p className="text-h4-r text-gray-scale-400 md:text-h2-r">
+            {!!tags && `총 ${tags?.results.length}개의 검색 관련 키워드`}
+          </p>
+          {isLoadingTags ? (
+            <section className="h-[100px] bg-red-50" />
+          ) : (
+            <article className="flex flex-wrap gap-[8px] md:gap-[16px]">
+              {tags?.results.map((tag) => (
+                <TagButton
+                  key={tag.id}
+                  title={tag.name}
+                  variant="colored"
+                  onClick={() => console.log("TagButton2 클릭")}
+                >
+                  {tag.name}
+                </TagButton>
+              ))}
+            </article>
+          )}
         </article>
         <article className="flex flex-col gap-[8px]">
           <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">검색 결과와 관련된 밈</p>
