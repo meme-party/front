@@ -7,15 +7,16 @@ import { COLORS } from "@/styles/colors"
 import { createQueryUrl } from "@/utils/createQueryUrl"
 import { Search } from "lucide-react"
 import dynamic from "next/dynamic"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 // import MemeMasonry from "@/components/MemeMasonry"
 
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
 
-export default function SearchContents() {
-  const searchParams = useSearchParams()
-  const keyword = searchParams.get("keyword")
+interface Params {
+  keyword?: string
+}
 
+export default function SearchContents({ keyword }: Params) {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery({
     search: keyword ?? "",
     perPage: 20
