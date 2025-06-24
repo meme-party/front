@@ -11,10 +11,13 @@ import TagButton from "@/components/TagButton"
 import TagSmallButton from "@/components/TagSmallButton"
 import Textarea from "@/components/Textarea"
 import { COLORS } from "@/styles/colors"
+import { createQueryUrl } from "@/utils/createQueryUrl"
 import { Search, Type } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export default function TestPage() {
+  const router = useRouter()
   return (
     <section className="mx-[20px] my-[80px] flex flex-col gap-[12px]">
       <Header />
@@ -43,11 +46,14 @@ export default function TestPage() {
       <article className="flex gap-[12px]">
         <SearchInput
           placeholder="검색어를 입력해주세요"
-          onSearch={() => console.log("검색 이벤트!")}
+          onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
           Icon={Search}
           iconProps={{ color: COLORS.PRIMARY }}
         />
-        <SearchInput placeholder="아이콘 없는 검색 Input" onSearch={() => console.log("검색 이벤트!")} />
+        <SearchInput
+          placeholder="아이콘 없는 검색 Input"
+          onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
+        />
       </article>
       <article className="flex gap-[12px]">
         <Textarea placeholder="메모를 입력해주세요" />

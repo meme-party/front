@@ -1,7 +1,7 @@
 import { InfiniteData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { ApiV1MemesListRequest } from "@/openapi/apis/ApiApi" // 요청 파라미터 타입
-import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList" // 응답 타입
-import { getApiV1Memes } from "../getApiV1Memes"
+import { ApiV1MemesListRequest } from "@/openapi/apis/ApiApi"
+import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
+import { getApiV1Memes } from "@/api//getApiV1Memes"
 
 export const useGetApiV1MemesQuery = (params?: ApiV1MemesListRequest) => {
   return useQuery<PaginatedMemeList, Error>({

@@ -1,8 +1,8 @@
 "use client"
 import { useGetApiV1MemesInfiniteQuery } from "@/api/react-query/useGetApiV1MemesQuery"
-import MemeTypeButtonSection from "@/components/MemeTypeButtonSection"
-import MoreViewButton from "@/components/MoreViewButton"
+import { useGetApiV1TagsQuery } from "@/api/react-query/useGetApiV1TagsQuery"
 import SearchInput from "@/components/SearchInput"
+import TagButton from "@/components/TagButton"
 import { COLORS } from "@/styles/colors"
 import { createQueryUrl } from "@/utils/createQueryUrl"
 import { Search } from "lucide-react"
@@ -12,9 +12,18 @@ import { useRouter } from "next/navigation"
 
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
 
-export default function ExploreContents() {
+interface Params {
+  keyword?: string
+}
+
+export default function SearchContents({ keyword }: Params) {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery({
+    search: keyword ?? "",
     perPage: 20
+  })
+
+  const { data: tags, isLoading: isLoadingTags } = useGetApiV1TagsQuery({
+    search: keyword ?? ""
   })
 
   const router = useRouter()
@@ -27,19 +36,31 @@ export default function ExploreContents() {
           onSearch={(value) => router.push(createQueryUrl("/explore/search", { keyword: value }))}
           Icon={Search}
           iconProps={{ color: COLORS.PRIMARY }}
+          defaultValue={keyword?.toString()}
         />
-        <section className="flex flex-col gap-[16px]">
-          <div className="flex flex-col items-start gap-[8px] md:flex-row md:items-center md:gap-[16px]">
-            <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">유형별 밈</p>
-            <p className="text-h4-r text-gray-scale-400 md:text-h2-r">
-              찾고 있는 밈을 텍스트, 이미지/GIF, 비디오 유형으로 빠르게 찾아봐요!
-            </p>
-          </div>
-          <MemeTypeButtonSection />
-        </section>
-        <MoreViewButton title="인기 밈 TOP 100" onClick={() => router.push("/explore/popularity")} />
+        <article className="flex flex-col gap-[8px] md:gap-[16px]">
+          <p className="text-h4-r text-gray-scale-400 md:text-h2-r">
+            {!!tags && `총 ${tags?.results.length}개의 검색 관련 키워드`}
+          </p>
+          {isLoadingTags ? (
+            <section className="h-[100px] bg-red-50" />
+          ) : (
+            <article className="flex flex-wrap gap-[8px] md:gap-[16px]">
+              {tags?.results.map((tag) => (
+                <TagButton
+                  key={tag.id}
+                  title={tag.name}
+                  variant="colored"
+                  onClick={() => console.log("TagButton2 클릭")}
+                >
+                  {tag.name}
+                </TagButton>
+              ))}
+            </article>
+          )}
+        </article>
         <article className="flex flex-col gap-[8px]">
-          <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">방금 올라온 따끈따끈한 밈</p>
+          <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">검색 결과와 관련된 밈</p>
           <MemeMasonry
             data={data}
             fetchNextPage={fetchNextPage}
