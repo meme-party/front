@@ -14,23 +14,19 @@
 
 import * as runtime from "../runtime"
 import type {
+  ApiV1MemesBookmarkIdsRetrieve200Response,
   Bookmark,
   Bookmarking,
   BookmarkingSyncRequest,
   JWT,
   KakaoAuthResponse,
-  Login,
   Meme,
   PaginatedBookmarkList,
   PaginatedBookmarkingList,
   PaginatedMemeList,
   PaginatedTagList,
-  PasswordChange,
-  PasswordReset,
-  PasswordResetConfirm,
-  PatchedBookmark,
-  PatchedUserDetail,
   RestAuthDetail,
+  SocialAccount,
   SocialLogin,
   Tag,
   TokenRefresh,
@@ -38,6 +34,8 @@ import type {
   UserDetail
 } from "../models/index"
 import {
+  ApiV1MemesBookmarkIdsRetrieve200ResponseFromJSON,
+  ApiV1MemesBookmarkIdsRetrieve200ResponseToJSON,
   BookmarkFromJSON,
   BookmarkToJSON,
   BookmarkingFromJSON,
@@ -48,8 +46,6 @@ import {
   JWTToJSON,
   KakaoAuthResponseFromJSON,
   KakaoAuthResponseToJSON,
-  LoginFromJSON,
-  LoginToJSON,
   MemeFromJSON,
   MemeToJSON,
   PaginatedBookmarkListFromJSON,
@@ -60,18 +56,10 @@ import {
   PaginatedMemeListToJSON,
   PaginatedTagListFromJSON,
   PaginatedTagListToJSON,
-  PasswordChangeFromJSON,
-  PasswordChangeToJSON,
-  PasswordResetFromJSON,
-  PasswordResetToJSON,
-  PasswordResetConfirmFromJSON,
-  PasswordResetConfirmToJSON,
-  PatchedBookmarkFromJSON,
-  PatchedBookmarkToJSON,
-  PatchedUserDetailFromJSON,
-  PatchedUserDetailToJSON,
   RestAuthDetailFromJSON,
   RestAuthDetailToJSON,
+  SocialAccountFromJSON,
+  SocialAccountToJSON,
   SocialLoginFromJSON,
   SocialLoginToJSON,
   TagFromJSON,
@@ -90,39 +78,54 @@ export interface ApiV1AccountsKakaoLoginCallbackRetrieveRequest {
 }
 
 export interface ApiV1AccountsKakaoLoginFinishCreateRequest {
-  socialLogin?: SocialLogin
+  accessToken?: string
+  code?: string
+  idToken?: string
 }
 
 export interface ApiV1AccountsLoginCreateRequest {
-  login: Login
+  password: string
+  username?: string
+  email?: string
 }
 
 export interface ApiV1AccountsPasswordChangeCreateRequest {
-  passwordChange: PasswordChange
+  newPassword1: string
+  newPassword2: string
 }
 
 export interface ApiV1AccountsPasswordResetConfirmCreateRequest {
-  passwordResetConfirm: PasswordResetConfirm
+  newPassword1: string
+  newPassword2: string
+  uid: string
+  token: string
 }
 
 export interface ApiV1AccountsPasswordResetCreateRequest {
-  passwordReset: PasswordReset
+  email: string
 }
 
 export interface ApiV1AccountsTokenRefreshCreateRequest {
-  tokenRefresh: Omit<TokenRefresh, "access">
+  access: string
+  refresh: string
 }
 
 export interface ApiV1AccountsTokenVerifyCreateRequest {
-  tokenVerify: TokenVerify
+  token: string
 }
 
 export interface ApiV1AccountsUserPartialUpdateRequest {
-  patchedUserDetail?: Omit<PatchedUserDetail, "pk" | "email" | "social_account">
+  pk?: number
+  email?: string
+  username?: string
+  socialAccount?: Array<SocialAccount>
 }
 
 export interface ApiV1AccountsUserUpdateRequest {
-  userDetail?: Omit<UserDetail, "pk" | "email" | "social_account">
+  pk: number
+  email: string
+  socialAccount: Array<SocialAccount>
+  username?: string
 }
 
 export interface ApiV1BookmarksBookmarkingsListRequest {
@@ -139,7 +142,11 @@ export interface ApiV1BookmarksBookmarkingsRetrieveRequest {
 }
 
 export interface ApiV1BookmarksCreateRequest {
-  bookmark: Omit<Bookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
+  id: number
+  title: string
+  bookmarkingsCount: number
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface ApiV1BookmarksDestroyRequest {
@@ -155,7 +162,11 @@ export interface ApiV1BookmarksListRequest {
 
 export interface ApiV1BookmarksPartialUpdateRequest {
   id: number
-  patchedBookmark?: Omit<PatchedBookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
+  id2?: number
+  title?: string
+  bookmarkingsCount?: number
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface ApiV1BookmarksRetrieveRequest {
@@ -164,7 +175,15 @@ export interface ApiV1BookmarksRetrieveRequest {
 
 export interface ApiV1BookmarksUpdateRequest {
   id: number
-  bookmark: Omit<Bookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
+  id2: number
+  title: string
+  bookmarkingsCount: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface ApiV1MemesBookmarkIdsRetrieveRequest {
+  memeId: number
 }
 
 export interface ApiV1MemesListRequest {
@@ -289,8 +308,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
-
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
       const tokenString = await token("jwtHeaderAuth", [])
@@ -299,13 +316,41 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["accessToken"] != null) {
+      formParams.append("access_token", requestParameters["accessToken"] as any)
+    }
+
+    if (requestParameters["code"] != null) {
+      formParams.append("code", requestParameters["code"] as any)
+    }
+
+    if (requestParameters["idToken"] != null) {
+      formParams.append("id_token", requestParameters["idToken"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/kakao/login/finish/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: SocialLoginToJSON(requestParameters["socialLogin"])
+        body: formParams
       },
       initOverrides
     )
@@ -331,18 +376,16 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsLoginCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<JWT>> {
-    if (requestParameters["login"] == null) {
+    if (requestParameters["password"] == null) {
       throw new runtime.RequiredError(
-        "login",
-        'Required parameter "login" was null or undefined when calling apiV1AccountsLoginCreate().'
+        "password",
+        'Required parameter "password" was null or undefined when calling apiV1AccountsLoginCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -352,13 +395,41 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["password"] != null) {
+      formParams.append("password", requestParameters["password"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/login/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: LoginToJSON(requestParameters["login"])
+        body: formParams
       },
       initOverrides
     )
@@ -423,18 +494,23 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordChangeCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordChange"] == null) {
+    if (requestParameters["newPassword1"] == null) {
       throw new runtime.RequiredError(
-        "passwordChange",
-        'Required parameter "passwordChange" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
+        "newPassword1",
+        'Required parameter "newPassword1" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
+      )
+    }
+
+    if (requestParameters["newPassword2"] == null) {
+      throw new runtime.RequiredError(
+        "newPassword2",
+        'Required parameter "newPassword2" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -444,13 +520,37 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["newPassword1"] != null) {
+      formParams.append("new_password1", requestParameters["newPassword1"] as any)
+    }
+
+    if (requestParameters["newPassword2"] != null) {
+      formParams.append("new_password2", requestParameters["newPassword2"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/change/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordChangeToJSON(requestParameters["passwordChange"])
+        body: formParams
       },
       initOverrides
     )
@@ -476,18 +576,37 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordResetConfirmCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordResetConfirm"] == null) {
+    if (requestParameters["newPassword1"] == null) {
       throw new runtime.RequiredError(
-        "passwordResetConfirm",
-        'Required parameter "passwordResetConfirm" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+        "newPassword1",
+        'Required parameter "newPassword1" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["newPassword2"] == null) {
+      throw new runtime.RequiredError(
+        "newPassword2",
+        'Required parameter "newPassword2" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["uid"] == null) {
+      throw new runtime.RequiredError(
+        "uid",
+        'Required parameter "uid" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["token"] == null) {
+      throw new runtime.RequiredError(
+        "token",
+        'Required parameter "token" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -497,13 +616,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["newPassword1"] != null) {
+      formParams.append("new_password1", requestParameters["newPassword1"] as any)
+    }
+
+    if (requestParameters["newPassword2"] != null) {
+      formParams.append("new_password2", requestParameters["newPassword2"] as any)
+    }
+
+    if (requestParameters["uid"] != null) {
+      formParams.append("uid", requestParameters["uid"] as any)
+    }
+
+    if (requestParameters["token"] != null) {
+      formParams.append("token", requestParameters["token"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/reset/confirm/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordResetConfirmToJSON(requestParameters["passwordResetConfirm"])
+        body: formParams
       },
       initOverrides
     )
@@ -529,18 +680,16 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordResetCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordReset"] == null) {
+    if (requestParameters["email"] == null) {
       throw new runtime.RequiredError(
-        "passwordReset",
-        'Required parameter "passwordReset" was null or undefined when calling apiV1AccountsPasswordResetCreate().'
+        "email",
+        'Required parameter "email" was null or undefined when calling apiV1AccountsPasswordResetCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -550,13 +699,33 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/reset/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordResetToJSON(requestParameters["passwordReset"])
+        body: formParams
       },
       initOverrides
     )
@@ -582,10 +751,17 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsTokenRefreshCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<TokenRefresh>> {
-    if (requestParameters["tokenRefresh"] == null) {
+    if (requestParameters["access"] == null) {
       throw new runtime.RequiredError(
-        "tokenRefresh",
-        'Required parameter "tokenRefresh" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
+        "access",
+        'Required parameter "access" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
+      )
+    }
+
+    if (requestParameters["refresh"] == null) {
+      throw new runtime.RequiredError(
+        "refresh",
+        'Required parameter "refresh" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
       )
     }
 
@@ -593,7 +769,29 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["access"] != null) {
+      formParams.append("access", requestParameters["access"] as any)
+    }
+
+    if (requestParameters["refresh"] != null) {
+      formParams.append("refresh", requestParameters["refresh"] as any)
+    }
 
     const response = await this.request(
       {
@@ -601,7 +799,7 @@ export class ApiApi extends runtime.BaseAPI {
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: TokenRefreshToJSON(requestParameters["tokenRefresh"])
+        body: formParams
       },
       initOverrides
     )
@@ -627,10 +825,10 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsTokenVerifyCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<TokenVerify>> {
-    if (requestParameters["tokenVerify"] == null) {
+    if (requestParameters["token"] == null) {
       throw new runtime.RequiredError(
-        "tokenVerify",
-        'Required parameter "tokenVerify" was null or undefined when calling apiV1AccountsTokenVerifyCreate().'
+        "token",
+        'Required parameter "token" was null or undefined when calling apiV1AccountsTokenVerifyCreate().'
       )
     }
 
@@ -638,7 +836,25 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["token"] != null) {
+      formParams.append("token", requestParameters["token"] as any)
+    }
 
     const response = await this.request(
       {
@@ -646,7 +862,7 @@ export class ApiApi extends runtime.BaseAPI {
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: TokenVerifyToJSON(requestParameters["tokenVerify"])
+        body: formParams
       },
       initOverrides
     )
@@ -676,8 +892,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
-
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
       const tokenString = await token("jwtHeaderAuth", [])
@@ -686,13 +900,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["pk"] != null) {
+      formParams.append("pk", requestParameters["pk"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["socialAccount"] != null) {
+      formParams.append("social_account", requestParameters["socialAccount"]!.join(runtime.COLLECTION_FORMATS["csv"]))
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/user/`,
         method: "PATCH",
         headers: headerParameters,
         query: queryParameters,
-        body: PatchedUserDetailToJSON(requestParameters["patchedUserDetail"])
+        body: formParams
       },
       initOverrides
     )
@@ -757,11 +1003,30 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsUserUpdateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<UserDetail>> {
+    if (requestParameters["pk"] == null) {
+      throw new runtime.RequiredError(
+        "pk",
+        'Required parameter "pk" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
+    if (requestParameters["email"] == null) {
+      throw new runtime.RequiredError(
+        "email",
+        'Required parameter "email" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
+    if (requestParameters["socialAccount"] == null) {
+      throw new runtime.RequiredError(
+        "socialAccount",
+        'Required parameter "socialAccount" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -771,13 +1036,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["pk"] != null) {
+      formParams.append("pk", requestParameters["pk"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["socialAccount"] != null) {
+      formParams.append("social_account", requestParameters["socialAccount"]!.join(runtime.COLLECTION_FORMATS["csv"]))
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/user/`,
         method: "PUT",
         headers: headerParameters,
         query: queryParameters,
-        body: UserDetailToJSON(requestParameters["userDetail"])
+        body: formParams
       },
       initOverrides
     )
@@ -789,7 +1086,7 @@ export class ApiApi extends runtime.BaseAPI {
    * Reads and updates UserModel fields Accepts GET, PUT, PATCH methods.  Default accepted fields: username, first_name, last_name Default display fields: pk, username, email, first_name, last_name Read-only fields: pk, email  Returns UserModel fields.
    */
   async apiV1AccountsUserUpdate(
-    requestParameters: ApiV1AccountsUserUpdateRequest = {},
+    requestParameters: ApiV1AccountsUserUpdateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<UserDetail> {
     const response = await this.apiV1AccountsUserUpdateRaw(requestParameters, initOverrides)
@@ -926,18 +1223,44 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1BookmarksCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<Bookmark>> {
-    if (requestParameters["bookmark"] == null) {
+    if (requestParameters["id"] == null) {
       throw new runtime.RequiredError(
-        "bookmark",
-        'Required parameter "bookmark" was null or undefined when calling apiV1BookmarksCreate().'
+        "id",
+        'Required parameter "id" was null or undefined when calling apiV1BookmarksCreate().'
+      )
+    }
+
+    if (requestParameters["title"] == null) {
+      throw new runtime.RequiredError(
+        "title",
+        'Required parameter "title" was null or undefined when calling apiV1BookmarksCreate().'
+      )
+    }
+
+    if (requestParameters["bookmarkingsCount"] == null) {
+      throw new runtime.RequiredError(
+        "bookmarkingsCount",
+        'Required parameter "bookmarkingsCount" was null or undefined when calling apiV1BookmarksCreate().'
+      )
+    }
+
+    if (requestParameters["createdAt"] == null) {
+      throw new runtime.RequiredError(
+        "createdAt",
+        'Required parameter "createdAt" was null or undefined when calling apiV1BookmarksCreate().'
+      )
+    }
+
+    if (requestParameters["updatedAt"] == null) {
+      throw new runtime.RequiredError(
+        "updatedAt",
+        'Required parameter "updatedAt" was null or undefined when calling apiV1BookmarksCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -947,13 +1270,49 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["id"] != null) {
+      formParams.append("id", requestParameters["id"] as any)
+    }
+
+    if (requestParameters["title"] != null) {
+      formParams.append("title", requestParameters["title"] as any)
+    }
+
+    if (requestParameters["bookmarkingsCount"] != null) {
+      formParams.append("bookmarkings_count", requestParameters["bookmarkingsCount"] as any)
+    }
+
+    if (requestParameters["createdAt"] != null) {
+      formParams.append("created_at", (requestParameters["createdAt"] as any).toISOString())
+    }
+
+    if (requestParameters["updatedAt"] != null) {
+      formParams.append("updated_at", (requestParameters["updatedAt"] as any).toISOString())
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/bookmarks/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: BookmarkToJSON(requestParameters["bookmark"])
+        body: formParams
       },
       initOverrides
     )
@@ -1092,8 +1451,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
-
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
       const tokenString = await token("jwtHeaderAuth", [])
@@ -1102,13 +1459,49 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["id2"] != null) {
+      formParams.append("id", requestParameters["id2"] as any)
+    }
+
+    if (requestParameters["title"] != null) {
+      formParams.append("title", requestParameters["title"] as any)
+    }
+
+    if (requestParameters["bookmarkingsCount"] != null) {
+      formParams.append("bookmarkings_count", requestParameters["bookmarkingsCount"] as any)
+    }
+
+    if (requestParameters["createdAt"] != null) {
+      formParams.append("created_at", (requestParameters["createdAt"] as any).toISOString())
+    }
+
+    if (requestParameters["updatedAt"] != null) {
+      formParams.append("updated_at", (requestParameters["updatedAt"] as any).toISOString())
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
         method: "PATCH",
         headers: headerParameters,
         query: queryParameters,
-        body: PatchedBookmarkToJSON(requestParameters["patchedBookmark"])
+        body: formParams
       },
       initOverrides
     )
@@ -1187,18 +1580,44 @@ export class ApiApi extends runtime.BaseAPI {
       )
     }
 
-    if (requestParameters["bookmark"] == null) {
+    if (requestParameters["id2"] == null) {
       throw new runtime.RequiredError(
-        "bookmark",
-        'Required parameter "bookmark" was null or undefined when calling apiV1BookmarksUpdate().'
+        "id2",
+        'Required parameter "id2" was null or undefined when calling apiV1BookmarksUpdate().'
+      )
+    }
+
+    if (requestParameters["title"] == null) {
+      throw new runtime.RequiredError(
+        "title",
+        'Required parameter "title" was null or undefined when calling apiV1BookmarksUpdate().'
+      )
+    }
+
+    if (requestParameters["bookmarkingsCount"] == null) {
+      throw new runtime.RequiredError(
+        "bookmarkingsCount",
+        'Required parameter "bookmarkingsCount" was null or undefined when calling apiV1BookmarksUpdate().'
+      )
+    }
+
+    if (requestParameters["createdAt"] == null) {
+      throw new runtime.RequiredError(
+        "createdAt",
+        'Required parameter "createdAt" was null or undefined when calling apiV1BookmarksUpdate().'
+      )
+    }
+
+    if (requestParameters["updatedAt"] == null) {
+      throw new runtime.RequiredError(
+        "updatedAt",
+        'Required parameter "updatedAt" was null or undefined when calling apiV1BookmarksUpdate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -1208,13 +1627,49 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["id2"] != null) {
+      formParams.append("id", requestParameters["id2"] as any)
+    }
+
+    if (requestParameters["title"] != null) {
+      formParams.append("title", requestParameters["title"] as any)
+    }
+
+    if (requestParameters["bookmarkingsCount"] != null) {
+      formParams.append("bookmarkings_count", requestParameters["bookmarkingsCount"] as any)
+    }
+
+    if (requestParameters["createdAt"] != null) {
+      formParams.append("created_at", (requestParameters["createdAt"] as any).toISOString())
+    }
+
+    if (requestParameters["updatedAt"] != null) {
+      formParams.append("updated_at", (requestParameters["updatedAt"] as any).toISOString())
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
         method: "PUT",
         headers: headerParameters,
         query: queryParameters,
-        body: BookmarkToJSON(requestParameters["bookmark"])
+        body: formParams
       },
       initOverrides
     )
@@ -1229,6 +1684,61 @@ export class ApiApi extends runtime.BaseAPI {
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<Bookmark> {
     const response = await this.apiV1BookmarksUpdateRaw(requestParameters, initOverrides)
+    return await response.value()
+  }
+
+  /**
+   * Retrieve a list of bookmark IDs for a specific meme.
+   */
+  async apiV1MemesBookmarkIdsRetrieveRaw(
+    requestParameters: ApiV1MemesBookmarkIdsRetrieveRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<ApiV1MemesBookmarkIdsRetrieve200Response>> {
+    if (requestParameters["memeId"] == null) {
+      throw new runtime.RequiredError(
+        "memeId",
+        'Required parameter "memeId" was null or undefined when calling apiV1MemesBookmarkIdsRetrieve().'
+      )
+    }
+
+    const queryParameters: any = {}
+
+    const headerParameters: runtime.HTTPHeaders = {}
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken
+      const tokenString = await token("jwtHeaderAuth", [])
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/memes/{meme_id}/bookmark_ids`.replace(
+          `{${"meme_id"}}`,
+          encodeURIComponent(String(requestParameters["memeId"]))
+        ),
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters
+      },
+      initOverrides
+    )
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      ApiV1MemesBookmarkIdsRetrieve200ResponseFromJSON(jsonValue)
+    )
+  }
+
+  /**
+   * Retrieve a list of bookmark IDs for a specific meme.
+   */
+  async apiV1MemesBookmarkIdsRetrieve(
+    requestParameters: ApiV1MemesBookmarkIdsRetrieveRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<ApiV1MemesBookmarkIdsRetrieve200Response> {
+    const response = await this.apiV1MemesBookmarkIdsRetrieveRaw(requestParameters, initOverrides)
     return await response.value()
   }
 
@@ -1720,6 +2230,44 @@ export class ApiApi extends runtime.BaseAPI {
   ): Promise<any> {
     const response = await this.bookmarkingSyncRaw(requestParameters, initOverrides)
     return await response.value()
+  }
+
+  /**
+   * 사용자 계정 및 연결된 소셜 계정을 삭제합니다.
+   */
+  async deleteUserAccountRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction
+  ): Promise<runtime.ApiResponse<void>> {
+    const queryParameters: any = {}
+
+    const headerParameters: runtime.HTTPHeaders = {}
+
+    if (this.configuration && this.configuration.accessToken) {
+      const token = this.configuration.accessToken
+      const tokenString = await token("jwtHeaderAuth", [])
+
+      if (tokenString) {
+        headerParameters["Authorization"] = `Bearer ${tokenString}`
+      }
+    }
+    const response = await this.request(
+      {
+        path: `/api/v1/accounts/user/delete/`,
+        method: "DELETE",
+        headers: headerParameters,
+        query: queryParameters
+      },
+      initOverrides
+    )
+
+    return new runtime.VoidApiResponse(response)
+  }
+
+  /**
+   * 사용자 계정 및 연결된 소셜 계정을 삭제합니다.
+   */
+  async deleteUserAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    await this.deleteUserAccountRaw(initOverrides)
   }
 }
 

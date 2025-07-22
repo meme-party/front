@@ -1,5 +1,6 @@
 /* tslint:disable */
 
+export * from "./ApiV1MemesBookmarkIdsRetrieve200Response"
 export * from "./Audio"
 export * from "./Bookmark"
 export * from "./Bookmarking"

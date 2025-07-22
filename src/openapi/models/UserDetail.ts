@@ -41,6 +41,12 @@ export interface UserDetail {
   readonly email: string
   /**
    *
+   * @type {string}
+   * @memberof UserDetail
+   */
+  username?: string
+  /**
+   *
    * @type {Array<SocialAccount>}
    * @memberof UserDetail
    */
@@ -68,6 +74,7 @@ export function UserDetailFromJSONTyped(json: any, ignoreDiscriminator: boolean)
   return {
     pk: json["pk"],
     email: json["email"],
+    username: json["username"] == null ? undefined : json["username"],
     socialAccount: (json["social_account"] as Array<any>).map(SocialAccountFromJSON)
   }
 }
@@ -84,5 +91,7 @@ export function UserDetailToJSONTyped(
     return value
   }
 
-  return {}
+  return {
+    username: value["username"]
+  }
 }
