@@ -1,16 +1,19 @@
+import { useGetApiV1BookmarksQuery } from "@/api/react-query/useGetApiV1BookmarksQuery"
 import Button from "@/components/Button"
+import { cn } from "@/utils/cn"
 import { Plus } from "lucide-react"
-const Collections = ["컬렉션1", "컬렉션2", "컬렉션3", "컬렉션4"]
 type Props = {
   onCreate: () => void
+  bookmarkedIds?: Array<number>
 }
 
-export default function CollectionList({ onCreate }: Props) {
+export default function CollectionList({ onCreate, bookmarkedIds }: Props) {
+  const { data: bookmarks } = useGetApiV1BookmarksQuery()
   return (
     <>
       <div className="mt-[28px] flex flex-col gap-[40px]">
         <div className="flex items-center gap-[8px]">
-          <Button className="bg-gray-scale-700 px-[20px] py-[10px] text-primary-300">
+          <Button className="bg-gray-scale-700 px-[24px] py-[10px] text-primary-300">
             <div className="flex items-center gap-[20px] text-h3-sb" onClick={onCreate}>
               <p>컬랙션 추가</p>
               <Plus fontSize={"14px"} stroke="3" />
@@ -19,10 +22,15 @@ export default function CollectionList({ onCreate }: Props) {
           <p className="text-xs text-gray-scale-400">현재 “컬렉션 1”에 수록되어 있어요!</p>
         </div>
         <div>
-          <div className="border-b-[1px] border-gray-scale-700 p-[8px]">기본</div>
-          {Collections.map((collection, idx) => (
-            <div className="border-b-[1px] border-gray-scale-700 p-[8px] py-[16px]" key={idx}>
-              <p className="">{collection}</p>
+          {bookmarks?.results.map((collection) => (
+            <div
+              className={cn(
+                "my-[8px] rounded-[8px] border-b-[1px] border-gray-scale-700 p-[8px] text-h2-m",
+                bookmarkedIds?.includes(collection.id) ? "bg-primary-400 text-gray-scale-100" : "text-gray-scale-400"
+              )}
+              key={collection.id}
+            >
+              <p className="">{collection.title}</p>
             </div>
           ))}
         </div>

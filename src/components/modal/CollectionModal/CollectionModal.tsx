@@ -1,13 +1,17 @@
-import CollectionList from "./CollectionList"
+import { useGetApiV1MemesMemeIdBookmarkIdsQuery } from "@/api/react-query/useGetApiV1MemesMemeIdBookmarkIdsQuery"
+import { ArrowLeft, X } from "lucide-react"
 import { useState } from "react"
 import CollectionCreate from "./CollectionCreate"
-import { ArrowLeft, X } from "lucide-react"
+import CollectionList from "./CollectionList"
 type Props = {
+  id?: number
   onCancel: () => void
 }
 
-export default function CollectionModal({ onCancel }: Props) {
+export default function CollectionModal({ id, onCancel }: Props) {
   const [isCreateMode, setIsCreateMode] = useState(false)
+  // const { data: bookmarks } = useGetApiV1BookmarksQuery()
+  const { data: bookmarkedIds } = useGetApiV1MemesMemeIdBookmarkIdsQuery(id)
 
   return (
     <div className="flex min-h-[600px] w-[720px] flex-col gap-[32px] rounded-[12px] border-[0.5px] border-primary-300 bg-gray-scale-800 px-[24px] py-[36px]">
@@ -24,7 +28,11 @@ export default function CollectionModal({ onCancel }: Props) {
       <div className="flex flex-1 gap-[24px]">
         <div className="w-[264px] flex-1 rounded-[12px] bg-black"></div>
         <div className="flex flex-1 flex-col justify-between">
-          {isCreateMode ? <CollectionCreate /> : <CollectionList onCreate={() => setIsCreateMode(true)} />}
+          {isCreateMode ? (
+            <CollectionCreate />
+          ) : (
+            <CollectionList onCreate={() => setIsCreateMode(true)} bookmarkedIds={bookmarkedIds?.bookmarkIds} />
+          )}
         </div>
       </div>
     </div>
