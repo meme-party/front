@@ -25,7 +25,7 @@ export default function Header() {
             <div className="relative h-[24px] w-[24px]">
               <Image src={"/cat.png"} alt="profile-image" fill className="rounded-full" />
             </div>
-            <p className="hidden text-h3-r md:flex">{user ? user.email : "비로그인"}</p>
+            <p className="hidden text-h3-r md:flex">{user ? user.username : "비로그인"}</p>
           </div>
         </Link>
         <Search size={24} color={COLORS.PRIMARY} />
