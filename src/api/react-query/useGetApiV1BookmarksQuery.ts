@@ -1,7 +1,7 @@
 import { useQuery, useInfiniteQuery, InfiniteData } from "@tanstack/react-query"
 import { getApiV1Bookmarks } from "@/api/getApiV1Bookmarks"
-import { ApiV1BookmarksListRequest } from "@/openapi/apis/ApiApi"
 import { PaginatedBookmarkList } from "@/openapi/models/PaginatedBookmarkList"
+import { ApiV1BookmarksListRequest } from "@/openapi/apis/BookmarkApi"
 
 export const useGetApiV1BookmarksQuery = (params?: ApiV1BookmarksListRequest) => {
   return useQuery<PaginatedBookmarkList, Error>({

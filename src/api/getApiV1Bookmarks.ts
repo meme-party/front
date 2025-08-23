@@ -1,5 +1,5 @@
 import { fetcher } from "@/api/fetcher"
-import { ApiV1BookmarksListRequest } from "@/openapi/apis/ApiApi"
+import { ApiV1BookmarksListRequest } from "@/openapi/apis/BookmarkApi"
 import { PaginatedBookmarkList } from "@/openapi/models/PaginatedBookmarkList"
 import { type SearchParamsOption } from "ky"
 
