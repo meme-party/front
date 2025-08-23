@@ -29,7 +29,7 @@ export default function CollectionModal({ id, onCancel }: Props) {
         <div className="w-[264px] flex-1 rounded-[12px] bg-black"></div>
         <div className="flex flex-1 flex-col justify-between">
           {isCreateMode ? (
-            <CollectionCreate />
+            <CollectionCreate onCreateSuccess={() => setIsCreateMode(false)} />
           ) : (
             <CollectionList onCreate={() => setIsCreateMode(true)} bookmarkedIds={bookmarkedIds?.bookmarkIds} />
           )}

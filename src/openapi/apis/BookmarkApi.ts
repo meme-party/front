@@ -13,10 +13,8 @@
  */
 
 import * as runtime from "../runtime"
-import type { ApiV1MemesBookmarkIdsRetrieve200Response, Bookmark, PaginatedBookmarkList } from "../models/index"
+import type { Bookmark, PaginatedBookmarkList } from "../models/index"
 import {
-  ApiV1MemesBookmarkIdsRetrieve200ResponseFromJSON,
-  ApiV1MemesBookmarkIdsRetrieve200ResponseToJSON,
   BookmarkFromJSON,
   BookmarkToJSON,
   PaginatedBookmarkListFromJSON,
@@ -62,10 +60,6 @@ export interface ApiV1BookmarksUpdateRequest {
   bookmarkingsCount: number
   createdAt: Date
   updatedAt: Date
-}
-
-export interface ApiV1MemesBookmarkIdsRetrieveRequest {
-  memeId: number
 }
 
 /**
@@ -539,61 +533,6 @@ export class BookmarkApi extends runtime.BaseAPI {
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<Bookmark> {
     const response = await this.apiV1BookmarksUpdateRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   * Retrieve a list of bookmark IDs for a specific meme.
-   */
-  async apiV1MemesBookmarkIdsRetrieveRaw(
-    requestParameters: ApiV1MemesBookmarkIdsRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<ApiV1MemesBookmarkIdsRetrieve200Response>> {
-    if (requestParameters["memeId"] == null) {
-      throw new runtime.RequiredError(
-        "memeId",
-        'Required parameter "memeId" was null or undefined when calling apiV1MemesBookmarkIdsRetrieve().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/memes/{meme_id}/bookmark_ids`.replace(
-          `{${"meme_id"}}`,
-          encodeURIComponent(String(requestParameters["memeId"]))
-        ),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      ApiV1MemesBookmarkIdsRetrieve200ResponseFromJSON(jsonValue)
-    )
-  }
-
-  /**
-   * Retrieve a list of bookmark IDs for a specific meme.
-   */
-  async apiV1MemesBookmarkIdsRetrieve(
-    requestParameters: ApiV1MemesBookmarkIdsRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<ApiV1MemesBookmarkIdsRetrieve200Response> {
-    const response = await this.apiV1MemesBookmarkIdsRetrieveRaw(requestParameters, initOverrides)
     return await response.value()
   }
 }

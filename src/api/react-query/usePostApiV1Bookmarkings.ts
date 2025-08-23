@@ -1,10 +1,9 @@
-import { PaginatedBookmarkingList } from "@/openapi/models/PaginatedBookmarkingList"
-import { BookmarkingSyncRequest } from "@/openapi/models/BookmarkingSyncRequest"
-import { useMutation } from "@tanstack/react-query"
 import { postApiV1Bookmarkings } from "@/api/postApiV1Bookmarkings"
+import { BookmarkingSyncRequest, BookmarkingSyncRequestToJSONTyped } from "@/openapi/models/BookmarkingSyncRequest"
+import { useMutation } from "@tanstack/react-query"
 
 export const usePostApiV1Bookmarkings = () => {
-  return useMutation<PaginatedBookmarkingList, Error, BookmarkingSyncRequest>({
+  return useMutation<ReturnType<typeof BookmarkingSyncRequestToJSONTyped>, Error, BookmarkingSyncRequest>({
     mutationFn: (payload) => postApiV1Bookmarkings(payload)
   })
 }

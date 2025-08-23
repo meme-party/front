@@ -13,13 +13,13 @@ export default function CollectionList({ onCreate, bookmarkedIds }: Props) {
     <>
       <div className="mt-[28px] flex flex-col gap-[40px]">
         <div className="flex items-center gap-[8px]">
-          <Button className="bg-gray-scale-700 px-[24px] py-[10px] text-primary-300">
-            <div className="flex items-center gap-[20px] text-h3-sb" onClick={onCreate}>
+          <Button className="bg-gray-scale-700 px-[24px] py-[10px] text-primary-300" onClick={onCreate}>
+            <div className="flex items-center gap-[20px] text-h3-sb">
               <p>컬랙션 추가</p>
               <Plus fontSize={"14px"} stroke="3" />
             </div>
           </Button>
-          <p className="text-xs text-gray-scale-400">현재 “컬렉션 1”에 수록되어 있어요!</p>
+          {/* <p className="text-xs text-gray-scale-400">현재 “컬렉션 1”에 수록되어 있어요!</p> */}
         </div>
         <div>
           {bookmarks?.results.map((collection) => (
