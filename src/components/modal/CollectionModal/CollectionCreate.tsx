@@ -21,6 +21,7 @@ export default function CollectionCreate({ onCreateSuccess }: Props) {
     await queryClient.invalidateQueries({ queryKey: [`/api/v1/bookmarks`] })
     onCreateSuccess()
   }
+
   return (
     <form className="flex h-full flex-col justify-between" onSubmit={handleSubmit(submit)}>
       <div className="flex flex-col gap-[16px]">
@@ -29,7 +30,7 @@ export default function CollectionCreate({ onCreateSuccess }: Props) {
       </div>
       <div className="flex justify-end">
         <Button className="h-[40px] w-[148px] bg-primary-400 p-0 disabled:bg-gray-scale-700" type="submit">
-          <p className="text-h1-m text-gray-scale-100">완료</p>
+          <p className="text-h1-m text-gray-100">완료</p>
         </Button>
       </div>
     </form>
