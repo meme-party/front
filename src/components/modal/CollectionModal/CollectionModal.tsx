@@ -32,7 +32,11 @@ export default function CollectionModal({ id, onCancel }: Props) {
           {isCreateMode ? (
             <CollectionCreate onCreateSuccess={() => setIsCreateMode(false)} />
           ) : (
-            <CollectionList onCreate={() => setIsCreateMode(true)} bookmarkedIds={bookmarkedIds?.bookmarkIds} />
+            <CollectionList
+              id={id}
+              onCreate={() => setIsCreateMode(true)}
+              bookmarkedIds={bookmarkedIds?.bookmarkIds ?? []}
+            />
           )}
         </div>
       </article>
