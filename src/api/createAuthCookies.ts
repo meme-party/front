@@ -16,3 +16,10 @@ export async function createAuthCookies(access: string, refresh: string) {
     httpOnly: true
   })
 }
+export async function deleteAccessToken() {
+  const cookieStore = await cookies()
+
+  cookieStore.delete({
+    name: "access"
+  })
+}

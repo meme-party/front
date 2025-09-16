@@ -2,7 +2,7 @@
 import MemeTypeButtonSection from "@/components/MemeTypeButtonSection"
 import MoreViewButton from "@/components/MoreViewButton"
 import Sidebar from "@/components/Sidebar"
-import TagButton from "@/components/TagButton"
+import TrendingTags from "@/components/TrendingTags"
 import "@/styles/sliderBullet.css"
 import { useRouter } from "next/navigation"
 import "swiper/css"
@@ -27,28 +27,8 @@ export default function Home() {
             <MemeTypeButtonSection />
           </section>
           <MoreViewButton title="인기 밈 TOP 100" onClick={() => router.push("/explore/popularity")} />
-          <section className="flex flex-col gap-[12px] rounded-[8px] bg-gray-scale-800 px-[12px] py-[16px] md:px-[24px] md:py-[24px]">
-            <article className="flex items-center gap-[4px]">
-              <p className="text-h2-sb text-gray-scale-100 md:text-h1-sb">트렌드 키워드</p>
-              <p className="text-h4-r text-gray-scale-400 md:text-h2-r">지금 핫한 밈 키워드를 소개해요</p>
-            </article>
-            <article className="flex flex-wrap gap-[8px] md:gap-[16px]">
-              <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-              <TagButton
-                title="키워드키워드키워드키워드키워드키워드키워드키워드키워드키워드키워드키"
-                variant="colored"
-                onClick={() => console.log("TagButton2 클릭")}
-              />
-              <TagButton
-                title="키워드키워드키워드키워드"
-                variant="colored"
-                onClick={() => console.log("TagButton2 클릭")}
-              />
-              <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-              <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-              <TagButton title="ㄱ키워드" variant="colored" onClick={() => console.log("TagButton2 클릭")} />
-            </article>
-          </section>
+          {/* 🎯 실제 API 데이터로 트렌드 키워드 표시 */}
+          <TrendingTags />
         </section>
         <section className="hidden lg:flex" />
       </section>

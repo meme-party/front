@@ -7,12 +7,13 @@ import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from 
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import ThumbnailCard from "./ThumbnailCard"
+import type { ApiError } from "@/api/core/types"
 
 interface Params {
   data?: InfiniteData<PaginatedMemeList, unknown> | undefined
   fetchNextPage: (
     options?: FetchNextPageOptions
-  ) => Promise<InfiniteQueryObserverResult<InfiniteData<PaginatedMemeList, unknown>, Error>>
+  ) => Promise<InfiniteQueryObserverResult<InfiniteData<PaginatedMemeList, unknown>, ApiError>>
   isLoading?: boolean
   hasNextPage?: boolean
   isFetchingNextPage?: boolean
