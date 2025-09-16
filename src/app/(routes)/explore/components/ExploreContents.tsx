@@ -1,5 +1,5 @@
 "use client"
-import { useGetApiV1MemesInfiniteQuery } from "@/api/react-query/useGetApiV1MemesQuery"
+import { useMemesInfiniteQuery } from "@/api/hooks/memes"
 import MemeTypeButtonSection from "@/components/MemeTypeButtonSection"
 import MoreViewButton from "@/components/MoreViewButton"
 import SearchInput from "@/components/SearchInput"
@@ -8,12 +8,11 @@ import { createQueryUrl } from "@/utils/createQueryUrl"
 import { Search } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
-// import MemeMasonry from "@/components/MemeMasonry"
 
 const MemeMasonry = dynamic(() => import("@/components/MemeMasonry"))
 
 export default function ExploreContents() {
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetApiV1MemesInfiniteQuery({
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useMemesInfiniteQuery({
     perPage: 20
   })
 

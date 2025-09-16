@@ -1,5 +1,5 @@
+import { fetcher } from "@/api/core/fetcher"
 import { KakaoAuthResponse } from "@/openapi/models/KakaoAuthResponse"
-import { fetcher } from "./fetcher"
 
 export function getKakaoLoginCallback(code: string) {
   const redirect_uri = process.env.NEXT_PUBLIC_LOGIN_REDIRECT_URI

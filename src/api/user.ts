@@ -1,6 +1,6 @@
+import { fetcher } from "@/api/core/fetcher"
 import { TokenVerify } from "@/openapi/models/TokenVerify"
-import { fetcher } from "./fetcher"
-import { getAccessToken } from "./getAuthToken"
+import { getClientAccessToken } from "./getAuthToken"
 import { UserDetail } from "@/openapi/models/UserDetail"
 
 export function getUser() {
@@ -8,7 +8,7 @@ export function getUser() {
 }
 
 export function verifyToken() {
-  const token = getAccessToken()
+  const token = getClientAccessToken()
   console.log("?", token)
   return fetcher.post<TokenVerify>("api/v1/accounts/token/verify", {
     json: { token }

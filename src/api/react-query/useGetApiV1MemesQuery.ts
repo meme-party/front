@@ -2,6 +2,7 @@ import { InfiniteData, useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { ApiV1MemesListRequest } from "@/openapi/apis/ApiApi"
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
 import { getApiV1Memes } from "@/api//getApiV1Memes"
+import { ApiError } from "../core/types"
 
 export const useGetApiV1MemesQuery = (params?: ApiV1MemesListRequest) => {
   return useQuery<PaginatedMemeList, Error>({
@@ -11,7 +12,7 @@ export const useGetApiV1MemesQuery = (params?: ApiV1MemesListRequest) => {
 }
 
 export const useGetApiV1MemesInfiniteQuery = (params?: ApiV1MemesListRequest) => {
-  return useInfiniteQuery<PaginatedMemeList, Error, InfiniteData<PaginatedMemeList>>({
+  return useInfiniteQuery<PaginatedMemeList, ApiError, InfiniteData<PaginatedMemeList>>({
     queryKey: ["/api/v1/memes", params],
     queryFn: ({ pageParam = 1 }) => {
       const updatedParams: ApiV1MemesListRequest = {
