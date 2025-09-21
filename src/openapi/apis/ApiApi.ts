@@ -14,68 +14,26 @@
 
 import * as runtime from "../runtime"
 import type {
-  Bookmark,
-  Bookmarking,
-  BookmarkingSyncRequest,
   JWT,
   KakaoAuthResponse,
-  Login,
-  Meme,
-  PaginatedBookmarkList,
-  PaginatedBookmarkingList,
-  PaginatedMemeList,
-  PaginatedTagList,
-  PasswordChange,
-  PasswordReset,
-  PasswordResetConfirm,
-  PatchedBookmark,
-  PatchedUserDetail,
   RestAuthDetail,
+  SocialAccount,
   SocialLogin,
-  Tag,
   TokenRefresh,
   TokenVerify,
   UserDetail
 } from "../models/index"
 import {
-  BookmarkFromJSON,
-  BookmarkToJSON,
-  BookmarkingFromJSON,
-  BookmarkingToJSON,
-  BookmarkingSyncRequestFromJSON,
-  BookmarkingSyncRequestToJSON,
   JWTFromJSON,
   JWTToJSON,
   KakaoAuthResponseFromJSON,
   KakaoAuthResponseToJSON,
-  LoginFromJSON,
-  LoginToJSON,
-  MemeFromJSON,
-  MemeToJSON,
-  PaginatedBookmarkListFromJSON,
-  PaginatedBookmarkListToJSON,
-  PaginatedBookmarkingListFromJSON,
-  PaginatedBookmarkingListToJSON,
-  PaginatedMemeListFromJSON,
-  PaginatedMemeListToJSON,
-  PaginatedTagListFromJSON,
-  PaginatedTagListToJSON,
-  PasswordChangeFromJSON,
-  PasswordChangeToJSON,
-  PasswordResetFromJSON,
-  PasswordResetToJSON,
-  PasswordResetConfirmFromJSON,
-  PasswordResetConfirmToJSON,
-  PatchedBookmarkFromJSON,
-  PatchedBookmarkToJSON,
-  PatchedUserDetailFromJSON,
-  PatchedUserDetailToJSON,
   RestAuthDetailFromJSON,
   RestAuthDetailToJSON,
+  SocialAccountFromJSON,
+  SocialAccountToJSON,
   SocialLoginFromJSON,
   SocialLoginToJSON,
-  TagFromJSON,
-  TagToJSON,
   TokenRefreshFromJSON,
   TokenRefreshToJSON,
   TokenVerifyFromJSON,
@@ -90,128 +48,54 @@ export interface ApiV1AccountsKakaoLoginCallbackRetrieveRequest {
 }
 
 export interface ApiV1AccountsKakaoLoginFinishCreateRequest {
-  socialLogin?: SocialLogin
+  accessToken?: string
+  code?: string
+  idToken?: string
 }
 
 export interface ApiV1AccountsLoginCreateRequest {
-  login: Login
+  password: string
+  username?: string
+  email?: string
 }
 
 export interface ApiV1AccountsPasswordChangeCreateRequest {
-  passwordChange: PasswordChange
+  newPassword1: string
+  newPassword2: string
 }
 
 export interface ApiV1AccountsPasswordResetConfirmCreateRequest {
-  passwordResetConfirm: PasswordResetConfirm
+  newPassword1: string
+  newPassword2: string
+  uid: string
+  token: string
 }
 
 export interface ApiV1AccountsPasswordResetCreateRequest {
-  passwordReset: PasswordReset
+  email: string
 }
 
 export interface ApiV1AccountsTokenRefreshCreateRequest {
-  tokenRefresh: Omit<TokenRefresh, "access">
+  access: string
+  refresh: string
 }
 
 export interface ApiV1AccountsTokenVerifyCreateRequest {
-  tokenVerify: TokenVerify
+  token: string
 }
 
 export interface ApiV1AccountsUserPartialUpdateRequest {
-  patchedUserDetail?: Omit<PatchedUserDetail, "pk" | "email" | "social_account">
+  pk?: number
+  email?: string
+  username?: string
+  socialAccount?: Array<SocialAccount>
 }
 
 export interface ApiV1AccountsUserUpdateRequest {
-  userDetail?: Omit<UserDetail, "pk" | "email" | "social_account">
-}
-
-export interface ApiV1BookmarksBookmarkingsListRequest {
-  bookmarkPk: number
-  ordering?: string
-  page?: number
-  perPage?: number
-  search?: string
-}
-
-export interface ApiV1BookmarksBookmarkingsRetrieveRequest {
-  bookmarkPk: number
-  id: number
-}
-
-export interface ApiV1BookmarksCreateRequest {
-  bookmark: Omit<Bookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
-}
-
-export interface ApiV1BookmarksDestroyRequest {
-  id: number
-}
-
-export interface ApiV1BookmarksListRequest {
-  ordering?: string
-  page?: number
-  perPage?: number
-  search?: string
-}
-
-export interface ApiV1BookmarksPartialUpdateRequest {
-  id: number
-  patchedBookmark?: Omit<PatchedBookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
-}
-
-export interface ApiV1BookmarksRetrieveRequest {
-  id: number
-}
-
-export interface ApiV1BookmarksUpdateRequest {
-  id: number
-  bookmark: Omit<Bookmark, "id" | "bookmarkings_count" | "created_at" | "updated_at">
-}
-
-export interface ApiV1MemesListRequest {
-  ordering?: string
-  page?: number
-  perPage?: number
-  search?: string
-  tagsCategoryName?: string
-  type?: ApiV1MemesListTypeEnum
-}
-
-export interface ApiV1MemesRelatedListRequest {
-  memeId: number
-  count?: number
-}
-
-export interface ApiV1MemesRetrieveRequest {
-  id: number
-}
-
-export interface ApiV1TagsByFirstLetterListRequest {
-  count?: number
-  orderBy?: ApiV1TagsByFirstLetterListOrderByEnum
-}
-
-export interface ApiV1TagsFavoriteListRequest {
-  ordering?: string
-  page?: number
-  perPage?: number
-  search?: string
-}
-
-export interface ApiV1TagsListRequest {
-  category?: number
-  firstLetter?: string
-  ordering?: string
-  page?: number
-  perPage?: number
-  search?: string
-}
-
-export interface BookmarkingDeleteRequest {
-  bookmarkingId: number
-}
-
-export interface BookmarkingSyncOperationRequest {
-  bookmarkingSyncRequest?: BookmarkingSyncRequest
+  pk: number
+  email: string
+  socialAccount: Array<SocialAccount>
+  username?: string
 }
 
 /**
@@ -289,8 +173,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
-
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
       const tokenString = await token("jwtHeaderAuth", [])
@@ -299,13 +181,41 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["accessToken"] != null) {
+      formParams.append("access_token", requestParameters["accessToken"] as any)
+    }
+
+    if (requestParameters["code"] != null) {
+      formParams.append("code", requestParameters["code"] as any)
+    }
+
+    if (requestParameters["idToken"] != null) {
+      formParams.append("id_token", requestParameters["idToken"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/kakao/login/finish/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: SocialLoginToJSON(requestParameters["socialLogin"])
+        body: formParams
       },
       initOverrides
     )
@@ -331,18 +241,16 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsLoginCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<JWT>> {
-    if (requestParameters["login"] == null) {
+    if (requestParameters["password"] == null) {
       throw new runtime.RequiredError(
-        "login",
-        'Required parameter "login" was null or undefined when calling apiV1AccountsLoginCreate().'
+        "password",
+        'Required parameter "password" was null or undefined when calling apiV1AccountsLoginCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -352,13 +260,41 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["password"] != null) {
+      formParams.append("password", requestParameters["password"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/login/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: LoginToJSON(requestParameters["login"])
+        body: formParams
       },
       initOverrides
     )
@@ -423,18 +359,23 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordChangeCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordChange"] == null) {
+    if (requestParameters["newPassword1"] == null) {
       throw new runtime.RequiredError(
-        "passwordChange",
-        'Required parameter "passwordChange" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
+        "newPassword1",
+        'Required parameter "newPassword1" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
+      )
+    }
+
+    if (requestParameters["newPassword2"] == null) {
+      throw new runtime.RequiredError(
+        "newPassword2",
+        'Required parameter "newPassword2" was null or undefined when calling apiV1AccountsPasswordChangeCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -444,13 +385,37 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["newPassword1"] != null) {
+      formParams.append("new_password1", requestParameters["newPassword1"] as any)
+    }
+
+    if (requestParameters["newPassword2"] != null) {
+      formParams.append("new_password2", requestParameters["newPassword2"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/change/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordChangeToJSON(requestParameters["passwordChange"])
+        body: formParams
       },
       initOverrides
     )
@@ -476,18 +441,37 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordResetConfirmCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordResetConfirm"] == null) {
+    if (requestParameters["newPassword1"] == null) {
       throw new runtime.RequiredError(
-        "passwordResetConfirm",
-        'Required parameter "passwordResetConfirm" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+        "newPassword1",
+        'Required parameter "newPassword1" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["newPassword2"] == null) {
+      throw new runtime.RequiredError(
+        "newPassword2",
+        'Required parameter "newPassword2" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["uid"] == null) {
+      throw new runtime.RequiredError(
+        "uid",
+        'Required parameter "uid" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
+      )
+    }
+
+    if (requestParameters["token"] == null) {
+      throw new runtime.RequiredError(
+        "token",
+        'Required parameter "token" was null or undefined when calling apiV1AccountsPasswordResetConfirmCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -497,13 +481,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["newPassword1"] != null) {
+      formParams.append("new_password1", requestParameters["newPassword1"] as any)
+    }
+
+    if (requestParameters["newPassword2"] != null) {
+      formParams.append("new_password2", requestParameters["newPassword2"] as any)
+    }
+
+    if (requestParameters["uid"] != null) {
+      formParams.append("uid", requestParameters["uid"] as any)
+    }
+
+    if (requestParameters["token"] != null) {
+      formParams.append("token", requestParameters["token"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/reset/confirm/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordResetConfirmToJSON(requestParameters["passwordResetConfirm"])
+        body: formParams
       },
       initOverrides
     )
@@ -529,18 +545,16 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsPasswordResetCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<RestAuthDetail>> {
-    if (requestParameters["passwordReset"] == null) {
+    if (requestParameters["email"] == null) {
       throw new runtime.RequiredError(
-        "passwordReset",
-        'Required parameter "passwordReset" was null or undefined when calling apiV1AccountsPasswordResetCreate().'
+        "email",
+        'Required parameter "email" was null or undefined when calling apiV1AccountsPasswordResetCreate().'
       )
     }
 
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -550,13 +564,33 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/password/reset/`,
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: PasswordResetToJSON(requestParameters["passwordReset"])
+        body: formParams
       },
       initOverrides
     )
@@ -582,10 +616,17 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsTokenRefreshCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<TokenRefresh>> {
-    if (requestParameters["tokenRefresh"] == null) {
+    if (requestParameters["access"] == null) {
       throw new runtime.RequiredError(
-        "tokenRefresh",
-        'Required parameter "tokenRefresh" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
+        "access",
+        'Required parameter "access" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
+      )
+    }
+
+    if (requestParameters["refresh"] == null) {
+      throw new runtime.RequiredError(
+        "refresh",
+        'Required parameter "refresh" was null or undefined when calling apiV1AccountsTokenRefreshCreate().'
       )
     }
 
@@ -593,7 +634,29 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["access"] != null) {
+      formParams.append("access", requestParameters["access"] as any)
+    }
+
+    if (requestParameters["refresh"] != null) {
+      formParams.append("refresh", requestParameters["refresh"] as any)
+    }
 
     const response = await this.request(
       {
@@ -601,7 +664,7 @@ export class ApiApi extends runtime.BaseAPI {
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: TokenRefreshToJSON(requestParameters["tokenRefresh"])
+        body: formParams
       },
       initOverrides
     )
@@ -627,10 +690,10 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsTokenVerifyCreateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<TokenVerify>> {
-    if (requestParameters["tokenVerify"] == null) {
+    if (requestParameters["token"] == null) {
       throw new runtime.RequiredError(
-        "tokenVerify",
-        'Required parameter "tokenVerify" was null or undefined when calling apiV1AccountsTokenVerifyCreate().'
+        "token",
+        'Required parameter "token" was null or undefined when calling apiV1AccountsTokenVerifyCreate().'
       )
     }
 
@@ -638,7 +701,25 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["token"] != null) {
+      formParams.append("token", requestParameters["token"] as any)
+    }
 
     const response = await this.request(
       {
@@ -646,7 +727,7 @@ export class ApiApi extends runtime.BaseAPI {
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: TokenVerifyToJSON(requestParameters["tokenVerify"])
+        body: formParams
       },
       initOverrides
     )
@@ -676,8 +757,6 @@ export class ApiApi extends runtime.BaseAPI {
 
     const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json"
-
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
       const tokenString = await token("jwtHeaderAuth", [])
@@ -686,13 +765,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["pk"] != null) {
+      formParams.append("pk", requestParameters["pk"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["socialAccount"] != null) {
+      formParams.append("social_account", requestParameters["socialAccount"]!.join(runtime.COLLECTION_FORMATS["csv"]))
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/user/`,
         method: "PATCH",
         headers: headerParameters,
         query: queryParameters,
-        body: PatchedUserDetailToJSON(requestParameters["patchedUserDetail"])
+        body: formParams
       },
       initOverrides
     )
@@ -757,11 +868,30 @@ export class ApiApi extends runtime.BaseAPI {
     requestParameters: ApiV1AccountsUserUpdateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<UserDetail>> {
+    if (requestParameters["pk"] == null) {
+      throw new runtime.RequiredError(
+        "pk",
+        'Required parameter "pk" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
+    if (requestParameters["email"] == null) {
+      throw new runtime.RequiredError(
+        "email",
+        'Required parameter "email" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
+    if (requestParameters["socialAccount"] == null) {
+      throw new runtime.RequiredError(
+        "socialAccount",
+        'Required parameter "socialAccount" was null or undefined when calling apiV1AccountsUserUpdate().'
+      )
+    }
+
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
 
     if (this.configuration && this.configuration.accessToken) {
       const token = this.configuration.accessToken
@@ -771,13 +901,45 @@ export class ApiApi extends runtime.BaseAPI {
         headerParameters["Authorization"] = `Bearer ${tokenString}`
       }
     }
+    const consumes: runtime.Consume[] = [
+      { contentType: "application/x-www-form-urlencoded" },
+      { contentType: "multipart/form-data" },
+      { contentType: "application/json" }
+    ]
+    // @ts-ignore: canConsumeForm may be unused
+    const canConsumeForm = runtime.canConsumeForm(consumes)
+
+    let formParams: { append(param: string, value: any): any }
+    let useForm = false
+    if (useForm) {
+      formParams = new FormData()
+    } else {
+      formParams = new URLSearchParams()
+    }
+
+    if (requestParameters["pk"] != null) {
+      formParams.append("pk", requestParameters["pk"] as any)
+    }
+
+    if (requestParameters["email"] != null) {
+      formParams.append("email", requestParameters["email"] as any)
+    }
+
+    if (requestParameters["username"] != null) {
+      formParams.append("username", requestParameters["username"] as any)
+    }
+
+    if (requestParameters["socialAccount"] != null) {
+      formParams.append("social_account", requestParameters["socialAccount"]!.join(runtime.COLLECTION_FORMATS["csv"]))
+    }
+
     const response = await this.request(
       {
         path: `/api/v1/accounts/user/`,
         method: "PUT",
         headers: headerParameters,
         query: queryParameters,
-        body: UserDetailToJSON(requestParameters["userDetail"])
+        body: formParams
       },
       initOverrides
     )
@@ -789,7 +951,7 @@ export class ApiApi extends runtime.BaseAPI {
    * Reads and updates UserModel fields Accepts GET, PUT, PATCH methods.  Default accepted fields: username, first_name, last_name Default display fields: pk, username, email, first_name, last_name Read-only fields: pk, email  Returns UserModel fields.
    */
   async apiV1AccountsUserUpdate(
-    requestParameters: ApiV1AccountsUserUpdateRequest = {},
+    requestParameters: ApiV1AccountsUserUpdateRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<UserDetail> {
     const response = await this.apiV1AccountsUserUpdateRaw(requestParameters, initOverrides)
@@ -797,193 +959,11 @@ export class ApiApi extends runtime.BaseAPI {
   }
 
   /**
+   * 사용자 계정 및 연결된 소셜 계정을 삭제합니다.
    */
-  async apiV1BookmarksBookmarkingsListRaw(
-    requestParameters: ApiV1BookmarksBookmarkingsListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PaginatedBookmarkingList>> {
-    if (requestParameters["bookmarkPk"] == null) {
-      throw new runtime.RequiredError(
-        "bookmarkPk",
-        'Required parameter "bookmarkPk" was null or undefined when calling apiV1BookmarksBookmarkingsList().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    if (requestParameters["ordering"] != null) {
-      queryParameters["ordering"] = requestParameters["ordering"]
-    }
-
-    if (requestParameters["page"] != null) {
-      queryParameters["page"] = requestParameters["page"]
-    }
-
-    if (requestParameters["perPage"] != null) {
-      queryParameters["per_page"] = requestParameters["perPage"]
-    }
-
-    if (requestParameters["search"] != null) {
-      queryParameters["search"] = requestParameters["search"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/{bookmark_pk}/bookmarkings/`.replace(
-          `{${"bookmark_pk"}}`,
-          encodeURIComponent(String(requestParameters["bookmarkPk"]))
-        ),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedBookmarkingListFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksBookmarkingsList(
-    requestParameters: ApiV1BookmarksBookmarkingsListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PaginatedBookmarkingList> {
-    const response = await this.apiV1BookmarksBookmarkingsListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksBookmarkingsRetrieveRaw(
-    requestParameters: ApiV1BookmarksBookmarkingsRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Bookmarking>> {
-    if (requestParameters["bookmarkPk"] == null) {
-      throw new runtime.RequiredError(
-        "bookmarkPk",
-        'Required parameter "bookmarkPk" was null or undefined when calling apiV1BookmarksBookmarkingsRetrieve().'
-      )
-    }
-
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1BookmarksBookmarkingsRetrieve().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/{bookmark_pk}/bookmarkings/{id}/`
-          .replace(`{${"bookmark_pk"}}`, encodeURIComponent(String(requestParameters["bookmarkPk"])))
-          .replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BookmarkingFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksBookmarkingsRetrieve(
-    requestParameters: ApiV1BookmarksBookmarkingsRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Bookmarking> {
-    const response = await this.apiV1BookmarksBookmarkingsRetrieveRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksCreateRaw(
-    requestParameters: ApiV1BookmarksCreateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Bookmark>> {
-    if (requestParameters["bookmark"] == null) {
-      throw new runtime.RequiredError(
-        "bookmark",
-        'Required parameter "bookmark" was null or undefined when calling apiV1BookmarksCreate().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/`,
-        method: "POST",
-        headers: headerParameters,
-        query: queryParameters,
-        body: BookmarkToJSON(requestParameters["bookmark"])
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BookmarkFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksCreate(
-    requestParameters: ApiV1BookmarksCreateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Bookmark> {
-    const response = await this.apiV1BookmarksCreateRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksDestroyRaw(
-    requestParameters: ApiV1BookmarksDestroyRequest,
+  async deleteUserAccountRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1BookmarksDestroy().'
-      )
-    }
-
     const queryParameters: any = {}
 
     const headerParameters: runtime.HTTPHeaders = {}
@@ -998,7 +978,7 @@ export class ApiApi extends runtime.BaseAPI {
     }
     const response = await this.request(
       {
-        path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
+        path: `/api/v1/accounts/user/delete/`,
         method: "DELETE",
         headers: headerParameters,
         query: queryParameters
@@ -1010,736 +990,9 @@ export class ApiApi extends runtime.BaseAPI {
   }
 
   /**
+   * 사용자 계정 및 연결된 소셜 계정을 삭제합니다.
    */
-  async apiV1BookmarksDestroy(
-    requestParameters: ApiV1BookmarksDestroyRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.apiV1BookmarksDestroyRaw(requestParameters, initOverrides)
-  }
-
-  /**
-   */
-  async apiV1BookmarksListRaw(
-    requestParameters: ApiV1BookmarksListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PaginatedBookmarkList>> {
-    const queryParameters: any = {}
-
-    if (requestParameters["ordering"] != null) {
-      queryParameters["ordering"] = requestParameters["ordering"]
-    }
-
-    if (requestParameters["page"] != null) {
-      queryParameters["page"] = requestParameters["page"]
-    }
-
-    if (requestParameters["perPage"] != null) {
-      queryParameters["per_page"] = requestParameters["perPage"]
-    }
-
-    if (requestParameters["search"] != null) {
-      queryParameters["search"] = requestParameters["search"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedBookmarkListFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksList(
-    requestParameters: ApiV1BookmarksListRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PaginatedBookmarkList> {
-    const response = await this.apiV1BookmarksListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksPartialUpdateRaw(
-    requestParameters: ApiV1BookmarksPartialUpdateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Bookmark>> {
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1BookmarksPartialUpdate().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
-        method: "PATCH",
-        headers: headerParameters,
-        query: queryParameters,
-        body: PatchedBookmarkToJSON(requestParameters["patchedBookmark"])
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BookmarkFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksPartialUpdate(
-    requestParameters: ApiV1BookmarksPartialUpdateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Bookmark> {
-    const response = await this.apiV1BookmarksPartialUpdateRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksRetrieveRaw(
-    requestParameters: ApiV1BookmarksRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Bookmark>> {
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1BookmarksRetrieve().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BookmarkFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksRetrieve(
-    requestParameters: ApiV1BookmarksRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Bookmark> {
-    const response = await this.apiV1BookmarksRetrieveRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1BookmarksUpdateRaw(
-    requestParameters: ApiV1BookmarksUpdateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Bookmark>> {
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1BookmarksUpdate().'
-      )
-    }
-
-    if (requestParameters["bookmark"] == null) {
-      throw new runtime.RequiredError(
-        "bookmark",
-        'Required parameter "bookmark" was null or undefined when calling apiV1BookmarksUpdate().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarks/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
-        method: "PUT",
-        headers: headerParameters,
-        query: queryParameters,
-        body: BookmarkToJSON(requestParameters["bookmark"])
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BookmarkFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1BookmarksUpdate(
-    requestParameters: ApiV1BookmarksUpdateRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Bookmark> {
-    const response = await this.apiV1BookmarksUpdateRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1MemesListRaw(
-    requestParameters: ApiV1MemesListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PaginatedMemeList>> {
-    const queryParameters: any = {}
-
-    if (requestParameters["ordering"] != null) {
-      queryParameters["ordering"] = requestParameters["ordering"]
-    }
-
-    if (requestParameters["page"] != null) {
-      queryParameters["page"] = requestParameters["page"]
-    }
-
-    if (requestParameters["perPage"] != null) {
-      queryParameters["per_page"] = requestParameters["perPage"]
-    }
-
-    if (requestParameters["search"] != null) {
-      queryParameters["search"] = requestParameters["search"]
-    }
-
-    if (requestParameters["tagsCategoryName"] != null) {
-      queryParameters["tags__category__name"] = requestParameters["tagsCategoryName"]
-    }
-
-    if (requestParameters["type"] != null) {
-      queryParameters["type"] = requestParameters["type"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/memes/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedMemeListFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1MemesList(
-    requestParameters: ApiV1MemesListRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PaginatedMemeList> {
-    const response = await this.apiV1MemesListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   * Retrieve a list of memes related to the given meme ID.
-   */
-  async apiV1MemesRelatedListRaw(
-    requestParameters: ApiV1MemesRelatedListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<Meme>>> {
-    if (requestParameters["memeId"] == null) {
-      throw new runtime.RequiredError(
-        "memeId",
-        'Required parameter "memeId" was null or undefined when calling apiV1MemesRelatedList().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    if (requestParameters["count"] != null) {
-      queryParameters["count"] = requestParameters["count"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/memes/{meme_id}/related`.replace(
-          `{${"meme_id"}}`,
-          encodeURIComponent(String(requestParameters["memeId"]))
-        ),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(MemeFromJSON))
-  }
-
-  /**
-   * Retrieve a list of memes related to the given meme ID.
-   */
-  async apiV1MemesRelatedList(
-    requestParameters: ApiV1MemesRelatedListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<Meme>> {
-    const response = await this.apiV1MemesRelatedListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1MemesRetrieveRaw(
-    requestParameters: ApiV1MemesRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Meme>> {
-    if (requestParameters["id"] == null) {
-      throw new runtime.RequiredError(
-        "id",
-        'Required parameter "id" was null or undefined when calling apiV1MemesRetrieve().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/memes/{id}/`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters["id"]))),
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => MemeFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1MemesRetrieve(
-    requestParameters: ApiV1MemesRetrieveRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Meme> {
-    const response = await this.apiV1MemesRetrieveRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   * Retrieve tags grouped by their first letter, with a specified limit per letter.
-   */
-  async apiV1TagsByFirstLetterListRaw(
-    requestParameters: ApiV1TagsByFirstLetterListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<Tag>>> {
-    const queryParameters: any = {}
-
-    if (requestParameters["count"] != null) {
-      queryParameters["count"] = requestParameters["count"]
-    }
-
-    if (requestParameters["orderBy"] != null) {
-      queryParameters["order_by"] = requestParameters["orderBy"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/tags/by-first-letter/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TagFromJSON))
-  }
-
-  /**
-   * Retrieve tags grouped by their first letter, with a specified limit per letter.
-   */
-  async apiV1TagsByFirstLetterList(
-    requestParameters: ApiV1TagsByFirstLetterListRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<Tag>> {
-    const response = await this.apiV1TagsByFirstLetterListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1TagsFavoriteListRaw(
-    requestParameters: ApiV1TagsFavoriteListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PaginatedTagList>> {
-    const queryParameters: any = {}
-
-    if (requestParameters["ordering"] != null) {
-      queryParameters["ordering"] = requestParameters["ordering"]
-    }
-
-    if (requestParameters["page"] != null) {
-      queryParameters["page"] = requestParameters["page"]
-    }
-
-    if (requestParameters["perPage"] != null) {
-      queryParameters["per_page"] = requestParameters["perPage"]
-    }
-
-    if (requestParameters["search"] != null) {
-      queryParameters["search"] = requestParameters["search"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/tags/favorite/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedTagListFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1TagsFavoriteList(
-    requestParameters: ApiV1TagsFavoriteListRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PaginatedTagList> {
-    const response = await this.apiV1TagsFavoriteListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   * Retrieve a list of distinct first letters from available tags.
-   */
-  async apiV1TagsFirstLettersRetrieveRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<Array<string>>> {
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/tags/first-letters/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse<any>(response)
-  }
-
-  /**
-   * Retrieve a list of distinct first letters from available tags.
-   */
-  async apiV1TagsFirstLettersRetrieve(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<Array<string>> {
-    const response = await this.apiV1TagsFirstLettersRetrieveRaw(initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async apiV1TagsListRaw(
-    requestParameters: ApiV1TagsListRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<PaginatedTagList>> {
-    const queryParameters: any = {}
-
-    if (requestParameters["category"] != null) {
-      queryParameters["category"] = requestParameters["category"]
-    }
-
-    if (requestParameters["firstLetter"] != null) {
-      queryParameters["first_letter"] = requestParameters["firstLetter"]
-    }
-
-    if (requestParameters["ordering"] != null) {
-      queryParameters["ordering"] = requestParameters["ordering"]
-    }
-
-    if (requestParameters["page"] != null) {
-      queryParameters["page"] = requestParameters["page"]
-    }
-
-    if (requestParameters["perPage"] != null) {
-      queryParameters["per_page"] = requestParameters["perPage"]
-    }
-
-    if (requestParameters["search"] != null) {
-      queryParameters["search"] = requestParameters["search"]
-    }
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/tags/`,
-        method: "GET",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => PaginatedTagListFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async apiV1TagsList(
-    requestParameters: ApiV1TagsListRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<PaginatedTagList> {
-    const response = await this.apiV1TagsListRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   * Removes the specified Bookmarking if it belongs to the current user. Returns 204 on success.
-   * Delete a Bookmarking
-   */
-  async bookmarkingDeleteRaw(
-    requestParameters: BookmarkingDeleteRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters["bookmarkingId"] == null) {
-      throw new runtime.RequiredError(
-        "bookmarkingId",
-        'Required parameter "bookmarkingId" was null or undefined when calling bookmarkingDelete().'
-      )
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarkings/{bookmarking_id}`.replace(
-          `{${"bookmarking_id"}}`,
-          encodeURIComponent(String(requestParameters["bookmarkingId"]))
-        ),
-        method: "DELETE",
-        headers: headerParameters,
-        query: queryParameters
-      },
-      initOverrides
-    )
-
-    return new runtime.VoidApiResponse(response)
-  }
-
-  /**
-   * Removes the specified Bookmarking if it belongs to the current user. Returns 204 on success.
-   * Delete a Bookmarking
-   */
-  async bookmarkingDelete(
-    requestParameters: BookmarkingDeleteRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<void> {
-    await this.bookmarkingDeleteRaw(requestParameters, initOverrides)
-  }
-
-  /**
-   * 단일 밈과 여러 북마크에 대해서 동시에 다룹니다.
-   * bulk sync bookmarkings
-   */
-  async bookmarkingSyncRaw(
-    requestParameters: BookmarkingSyncOperationRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<runtime.ApiResponse<any>> {
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    headerParameters["Content-Type"] = "application/json"
-
-    if (this.configuration && this.configuration.accessToken) {
-      const token = this.configuration.accessToken
-      const tokenString = await token("jwtHeaderAuth", [])
-
-      if (tokenString) {
-        headerParameters["Authorization"] = `Bearer ${tokenString}`
-      }
-    }
-    const response = await this.request(
-      {
-        path: `/api/v1/bookmarkings/`,
-        method: "POST",
-        headers: headerParameters,
-        query: queryParameters,
-        body: BookmarkingSyncRequestToJSON(requestParameters["bookmarkingSyncRequest"])
-      },
-      initOverrides
-    )
-
-    if (this.isJsonMime(response.headers.get("content-type"))) {
-      return new runtime.JSONApiResponse<any>(response)
-    } else {
-      return new runtime.TextApiResponse(response) as any
-    }
-  }
-
-  /**
-   * 단일 밈과 여러 북마크에 대해서 동시에 다룹니다.
-   * bulk sync bookmarkings
-   */
-  async bookmarkingSync(
-    requestParameters: BookmarkingSyncOperationRequest = {},
-    initOverrides?: RequestInit | runtime.InitOverrideFunction
-  ): Promise<any> {
-    const response = await this.bookmarkingSyncRaw(requestParameters, initOverrides)
-    return await response.value()
+  async deleteUserAccount(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    await this.deleteUserAccountRaw(initOverrides)
   }
 }
-
-/**
- * @export
- */
-export const ApiV1MemesListTypeEnum = {
-  Audio: "Audio",
-  Image: "Image",
-  Text: "Text",
-  Video: "Video"
-} as const
-export type ApiV1MemesListTypeEnum = (typeof ApiV1MemesListTypeEnum)[keyof typeof ApiV1MemesListTypeEnum]
-/**
- * @export
- */
-export const ApiV1TagsByFirstLetterListOrderByEnum = {
-  CreatedAt: "created_at",
-  Name: "name",
-  UpdatedAt: "updated_at"
-} as const
-export type ApiV1TagsByFirstLetterListOrderByEnum =
-  (typeof ApiV1TagsByFirstLetterListOrderByEnum)[keyof typeof ApiV1TagsByFirstLetterListOrderByEnum]

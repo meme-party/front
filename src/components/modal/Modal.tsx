@@ -10,10 +10,7 @@ export default function Modal() {
   if (!isOpen) return null
 
   return ReactDOM.createPortal(
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-gray-scale-900 backdrop-blur-2xl"
-      onClick={closeModal}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" onClick={closeModal}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

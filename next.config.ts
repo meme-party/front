@@ -1,16 +1,57 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"]
+    })
+
+    return config
+  },
+  experimental: {
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js"
+        }
+      }
+    }
+  },
   images: {
-    domains: [
+    unoptimized: true,
+    remotePatterns: [
       // start region temporary
-      "academy.ilwoo.org",
-      "img1.daumcdn.net",
-      "media.istockphoto.com",
+      {
+        protocol: "https",
+        hostname: "academy.ilwoo.org"
+      },
+      {
+        protocol: "https",
+        hostname: "img1.daumcdn.net"
+      },
+      {
+        protocol: "https",
+        hostname: "media.istockphoto.com"
+      },
       // end region temporary
-      "alpha-api.memez.party",
-      "api.memez.party",
-      "memez.party"
+      {
+        protocol: "http",
+        hostname: "alpha-api.memez.party"
+      },
+      {
+        protocol: "https",
+        hostname: "alpha-api.memez.party"
+      },
+      {
+        protocol: "https",
+        hostname: "api.memez.party"
+      },
+      {
+        protocol: "https",
+        hostname: "memez.party"
+      }
     ]
   }
 }
