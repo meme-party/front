@@ -1,5 +1,5 @@
 import { fetcher } from "@/api/fetcher"
-import { ApiV1MemesListRequest } from "@/openapi/apis/ApiApi"
+import { ApiV1MemesListRequest } from "@/openapi/apis/MemeApi"
 import { PaginatedMemeList } from "@/openapi/models/PaginatedMemeList"
 import { type SearchParamsOption } from "ky"
 

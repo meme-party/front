@@ -1,5 +1,5 @@
 "use client"
-import { useGetApiV1MemesDetailByIdQuery } from "@/api/react-query/useGetApiV1MemesDetailByIdQuery"
+import { useGetApiV1MemesIdQuery } from "@/api/react-query/useGetApiV1MemesIdQuery"
 import TagButton from "@/components/TagButton"
 import { TypeEnum } from "@/openapi/models/TypeEnum"
 import { COLORS } from "@/styles/colors"
@@ -9,7 +9,7 @@ import { useParams } from "next/navigation"
 
 export default function MemeDetailBox() {
   const { id } = useParams()
-  const { data } = useGetApiV1MemesDetailByIdQuery(id as string)
+  const { data } = useGetApiV1MemesIdQuery(id as string)
   return (
     <section className="flex w-full flex-col gap-[32px] rounded-[12px] bg-gray-scale-800 p-[24px]">
       <div className="flex flex-col gap-[12px]">

@@ -95,6 +95,12 @@ export interface Meme {
    * @type {string}
    * @memberof Meme
    */
+  originalTitle?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Meme
+   */
   originalLink?: string | null
   /**
    *
@@ -108,6 +114,12 @@ export interface Meme {
    * @memberof Meme
    */
   readonly tags: Array<Tag>
+  /**
+   *
+   * @type {string}
+   * @memberof Meme
+   */
+  readonly isBookmarked: string
   /**
    *
    * @type {Date}
@@ -134,6 +146,7 @@ export function instanceOfMeme(value: object): value is Meme {
   if (!("audio" in value) || value["audio"] === undefined) return false
   if (!("video" in value) || value["video"] === undefined) return false
   if (!("tags" in value) || value["tags"] === undefined) return false
+  if (!("isBookmarked" in value) || value["isBookmarked"] === undefined) return false
   if (!("createdAt" in value) || value["createdAt"] === undefined) return false
   if (!("updatedAt" in value) || value["updatedAt"] === undefined) return false
   return true
@@ -158,9 +171,11 @@ export function MemeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Meme
     audio: AudioFromJSON(json["audio"]),
     videoId: json["video_id"] == null ? undefined : json["video_id"],
     video: VideoFromJSON(json["video"]),
+    originalTitle: json["original_title"] == null ? undefined : json["original_title"],
     originalLink: json["original_link"] == null ? undefined : json["original_link"],
     tagIds: json["tag_ids"] == null ? undefined : json["tag_ids"],
     tags: (json["tags"] as Array<any>).map(TagFromJSON),
+    isBookmarked: json["is_bookmarked"],
     createdAt: new Date(json["created_at"]),
     updatedAt: new Date(json["updated_at"])
   }
@@ -171,7 +186,10 @@ export function MemeToJSON(json: any): Meme {
 }
 
 export function MemeToJSONTyped(
-  value?: Omit<Meme, "id" | "thumbnail" | "audio" | "video" | "tags" | "created_at" | "updated_at"> | null,
+  value?: Omit<
+    Meme,
+    "id" | "thumbnail" | "audio" | "video" | "tags" | "is_bookmarked" | "created_at" | "updated_at"
+  > | null,
   ignoreDiscriminator: boolean = false
 ): any {
   if (value == null) {
@@ -185,6 +203,7 @@ export function MemeToJSONTyped(
     thumbnail_id: value["thumbnailId"],
     audio_id: value["audioId"],
     video_id: value["videoId"],
+    original_title: value["originalTitle"],
     original_link: value["originalLink"],
     tag_ids: value["tagIds"]
   }

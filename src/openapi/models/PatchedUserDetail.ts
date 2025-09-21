@@ -41,6 +41,12 @@ export interface PatchedUserDetail {
   readonly email?: string
   /**
    *
+   * @type {string}
+   * @memberof PatchedUserDetail
+   */
+  username?: string
+  /**
+   *
    * @type {Array<SocialAccount>}
    * @memberof PatchedUserDetail
    */
@@ -65,6 +71,7 @@ export function PatchedUserDetailFromJSONTyped(json: any, ignoreDiscriminator: b
   return {
     pk: json["pk"] == null ? undefined : json["pk"],
     email: json["email"] == null ? undefined : json["email"],
+    username: json["username"] == null ? undefined : json["username"],
     socialAccount:
       json["social_account"] == null ? undefined : (json["social_account"] as Array<any>).map(SocialAccountFromJSON)
   }
@@ -82,5 +89,7 @@ export function PatchedUserDetailToJSONTyped(
     return value
   }
 
-  return {}
+  return {
+    username: value["username"]
+  }
 }

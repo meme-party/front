@@ -31,6 +31,12 @@ export interface BookmarkingSyncRequest {
    * @memberof BookmarkingSyncRequest
    */
   bookmarkIds: Array<number>
+  /**
+   * If true, Bookmarkings without a Bookmark will be saved.
+   * @type {boolean}
+   * @memberof BookmarkingSyncRequest
+   */
+  withoutBookmark?: boolean
 }
 
 /**
@@ -52,7 +58,8 @@ export function BookmarkingSyncRequestFromJSONTyped(json: any, ignoreDiscriminat
   }
   return {
     memeId: json["meme_id"],
-    bookmarkIds: json["bookmark_ids"]
+    bookmarkIds: json["bookmark_ids"],
+    withoutBookmark: json["without_bookmark"] == null ? undefined : json["without_bookmark"]
   }
 }
 
@@ -70,6 +77,7 @@ export function BookmarkingSyncRequestToJSONTyped(
 
   return {
     meme_id: value["memeId"],
-    bookmark_ids: value["bookmarkIds"]
+    bookmark_ids: value["bookmarkIds"],
+    without_bookmark: value["withoutBookmark"]
   }
 }
